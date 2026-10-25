@@ -1,0 +1,57 @@
+version: 2
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: commitments
+      - name: records
+      - name: adjustments
+      - name: lifecycle
+      - name: subscription_changes
+models:
+  - name: fct_contract_period
+    columns:
+      - name: contract_id
+        data_tests: [not_null]
+      - name: monthly_cents
+        data_tests: [not_null]
+  - name: fct_subscription_period
+    columns:
+      - name: subscription_id
+        data_tests: [not_null]
+      - name: monthly_cents
+        data_tests: [not_null]
+  - name: fct_invoices
+    columns:
+      - name: invoice_id
+        data_tests: [unique, not_null]
+      - name: tenant
+        data_tests: [not_null]
+      - name: entity
+        data_tests: [not_null]
+      - name: header_cents
+        data_tests: [not_null]
+      - name: line_cents
+        data_tests: [not_null]
+      - name: expected_base_cents
+        data_tests: [not_null]
+  - name: fct_adjustments
+    columns:
+      - name: event_id
+        data_tests: [not_null]
+      - name: invoice_id
+        data_tests: [not_null]
+  - name: mart_reconciliation
+    columns:
+      - name: invoice_id
+        data_tests: [unique, not_null]
+      - name: expected_invoice_cents
+        data_tests: [not_null]
+      - name: billing_net_cents
+        data_tests: [not_null]
+      - name: erp_net_cents
+        data_tests: [not_null]
+  - name: mart_period
+    columns:
+      - name: entity
+        data_tests: [not_null]

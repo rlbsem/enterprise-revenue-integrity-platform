@@ -1,0 +1,26 @@
+{
+  "preliminary_runs": [
+    {
+      "run": "initial",
+      "outcome": "mapping read lock needed UPDATE privilege; removed unnecessary row lock rather than granting map writes"
+    },
+    {
+      "run": "second",
+      "outcome": "PostgreSQL bigint SUM returns Decimal; exact integer serialization corrected"
+    },
+    {
+      "run": "qualified-preparation",
+      "tests_passed": 19,
+      "tests_failed": 1,
+      "outcome": "cross-database CONNECT denial succeeded; expected Python exception class corrected"
+    },
+    {
+      "run": "verification-preparation",
+      "tests_passed": 20,
+      "tests_failed": 0,
+      "outcome": "unqualified preparation run; evidence hashing convention subsequently stabilized"
+    }
+  ],
+  "qualified_source_commit": "cd4954c25da8313d228747ba6f8645eaf4bfc6f1",
+  "qualified_test_count": 20
+}

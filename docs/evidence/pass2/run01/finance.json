@@ -1,0 +1,1427 @@
+{
+  "lane": "local_postgresql_http_duckdb_dbt",
+  "initial_transaction_source_hash": "bdad7516b8a81a152f90055a3d62ef668281e371ec4e68f1b30bba5fbd9b9f5a",
+  "original_release": {
+    "contract": "reconciled-release.v1",
+    "period": {
+      "start": "2026-01-01",
+      "end_exclusive": "2026-04-01",
+      "known_at": "2026-03-31T23:59:59+00:00"
+    },
+    "source_hash": "11e137287440d02f929b48471697492a9ee38a12438245caf487f1a84a84728a",
+    "rows": [
+      {
+        "invoice_id": "24cec645-3bae-5926-a5f7-cad16f995ad2",
+        "tenant": "northstar",
+        "entity": "EU",
+        "currency": "USD",
+        "expected_invoice_cents": 1200000,
+        "billing_net_cents": 1200000,
+        "erp_net_cents": 1200000,
+        "allocated_cash_cents": 450000,
+        "erp_applied_cash_cents": 450000,
+        "credit_cents": 0,
+        "proration_cents": 0,
+        "billing_contract_variance_cents": 0,
+        "posting_variance_cents": 0,
+        "cash_application_variance_cents": 0
+      },
+      {
+        "invoice_id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+        "tenant": "northstar",
+        "entity": "US",
+        "currency": "USD",
+        "expected_invoice_cents": 3000000,
+        "billing_net_cents": 3000000,
+        "erp_net_cents": 3000000,
+        "allocated_cash_cents": 1200000,
+        "erp_applied_cash_cents": 1200000,
+        "credit_cents": 0,
+        "proration_cents": 0,
+        "billing_contract_variance_cents": 0,
+        "posting_variance_cents": 0,
+        "cash_application_variance_cents": 0
+      }
+    ],
+    "comparison_scope": "issued Q1 invoices; missing commitments reported separately",
+    "unbilled_commitments": [
+      {
+        "tenant": "northstar",
+        "entity": "US",
+        "contract_id": "800-synthetic-3",
+        "reason": "ambiguous_or_missing_mapping",
+        "scheduled_quarter_cents": 540000
+      }
+    ],
+    "period_measures": [
+      {
+        "tenant": "northstar",
+        "entity": "EU",
+        "currency": "USD",
+        "expected_invoice_cents": 1200000,
+        "billing_net_cents": 1200000,
+        "erp_net_cents": 1200000,
+        "allocated_cash_cents": 450000,
+        "period_end_arr_cents": 4800000
+      },
+      {
+        "tenant": "northstar",
+        "entity": "US",
+        "currency": "USD",
+        "expected_invoice_cents": 3000000,
+        "billing_net_cents": 3000000,
+        "erp_net_cents": 3000000,
+        "allocated_cash_cents": 1200000,
+        "period_end_arr_cents": 12000000
+      }
+    ],
+    "variance_bridge": {
+      "scope": "Q1 issued invoices; ARR shown separately",
+      "entries": [
+        {
+          "invoice_id": "24cec645-3bae-5926-a5f7-cad16f995ad2",
+          "tenant": "northstar",
+          "entity": "EU",
+          "currency": "USD",
+          "source_record_ids": [
+            "0a7582c6-f511-51e3-9722-a9229336d345",
+            "24cec645-3bae-5926-a5f7-cad16f995ad2",
+            "7fc99d2d-2552-58db-aaee-cf3b9b782ba3",
+            "862dcaad-53b4-5afd-a352-af47553e15ae",
+            "95274257-9baa-50ce-8c60-9cadb34b8728"
+          ],
+          "category": "unsettled_invoice_balance",
+          "amount_cents": 750000,
+          "owner": "accounts_receivable",
+          "explanation": "Issued invoice cohort less matched allocations; not revenue uplift"
+        },
+        {
+          "invoice_id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+          "tenant": "northstar",
+          "entity": "US",
+          "currency": "USD",
+          "source_record_ids": [
+            "0b17c4a8-be1b-5e5d-83f9-f499717bb682",
+            "39e419ff-ea85-5b31-8da7-9a058b4c0c9a",
+            "8104f584-ebbe-55f7-ac6b-03af42e58a52",
+            "9e4f984c-8134-590c-9bb3-8bf710cc8b85",
+            "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d"
+          ],
+          "category": "unsettled_invoice_balance",
+          "amount_cents": 1800000,
+          "owner": "accounts_receivable",
+          "explanation": "Issued invoice cohort less matched allocations; not revenue uplift"
+        }
+      ],
+      "backdated_correction_lineage": [],
+      "unbilled_commitments": [
+        {
+          "tenant": "northstar",
+          "entity": "US",
+          "contract_id": "800-synthetic-3",
+          "reason": "ambiguous_or_missing_mapping",
+          "scheduled_quarter_cents": 540000
+        }
+      ]
+    },
+    "state": "review_required"
+  },
+  "final_release": {
+    "contract": "reconciled-release.v1",
+    "period": {
+      "start": "2026-01-01",
+      "end_exclusive": "2026-04-01",
+      "known_at": "2026-03-31T23:59:59+00:00"
+    },
+    "source_hash": "a03682adad3b64a85fe15a8536f2bfeaffc54c95c8104e115df7e89b97638123",
+    "rows": [
+      {
+        "invoice_id": "24cec645-3bae-5926-a5f7-cad16f995ad2",
+        "tenant": "northstar",
+        "entity": "EU",
+        "currency": "USD",
+        "expected_invoice_cents": 1200000,
+        "billing_net_cents": 1200000,
+        "erp_net_cents": 1200000,
+        "allocated_cash_cents": 450000,
+        "erp_applied_cash_cents": 450000,
+        "credit_cents": 0,
+        "proration_cents": 0,
+        "billing_contract_variance_cents": 0,
+        "posting_variance_cents": 0,
+        "cash_application_variance_cents": 0
+      },
+      {
+        "invoice_id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+        "tenant": "northstar",
+        "entity": "US",
+        "currency": "USD",
+        "expected_invoice_cents": 2950000,
+        "billing_net_cents": 2950000,
+        "erp_net_cents": 2800000,
+        "allocated_cash_cents": 1200000,
+        "erp_applied_cash_cents": 1200000,
+        "credit_cents": 200000,
+        "proration_cents": 150000,
+        "billing_contract_variance_cents": 0,
+        "posting_variance_cents": -150000,
+        "cash_application_variance_cents": 0
+      }
+    ],
+    "comparison_scope": "issued Q1 invoices; missing commitments reported separately",
+    "unbilled_commitments": [
+      {
+        "tenant": "northstar",
+        "entity": "US",
+        "contract_id": "800-synthetic-3",
+        "reason": "ambiguous_or_missing_mapping",
+        "scheduled_quarter_cents": 540000
+      }
+    ],
+    "period_measures": [
+      {
+        "tenant": "northstar",
+        "entity": "EU",
+        "currency": "USD",
+        "expected_invoice_cents": 1200000,
+        "billing_net_cents": 1200000,
+        "erp_net_cents": 1200000,
+        "allocated_cash_cents": 450000,
+        "period_end_arr_cents": 4800000
+      },
+      {
+        "tenant": "northstar",
+        "entity": "US",
+        "currency": "USD",
+        "expected_invoice_cents": 2950000,
+        "billing_net_cents": 2950000,
+        "erp_net_cents": 2800000,
+        "allocated_cash_cents": 1200000,
+        "period_end_arr_cents": 12000000
+      }
+    ],
+    "variance_bridge": {
+      "scope": "Q1 issued invoices; ARR shown separately",
+      "entries": [
+        {
+          "invoice_id": "24cec645-3bae-5926-a5f7-cad16f995ad2",
+          "tenant": "northstar",
+          "entity": "EU",
+          "currency": "USD",
+          "source_record_ids": [
+            "0a7582c6-f511-51e3-9722-a9229336d345",
+            "24cec645-3bae-5926-a5f7-cad16f995ad2",
+            "7fc99d2d-2552-58db-aaee-cf3b9b782ba3",
+            "862dcaad-53b4-5afd-a352-af47553e15ae",
+            "95274257-9baa-50ce-8c60-9cadb34b8728"
+          ],
+          "category": "unsettled_invoice_balance",
+          "amount_cents": 750000,
+          "owner": "accounts_receivable",
+          "explanation": "Issued invoice cohort less matched allocations; not revenue uplift"
+        },
+        {
+          "invoice_id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+          "tenant": "northstar",
+          "entity": "US",
+          "currency": "USD",
+          "source_record_ids": [
+            "0b17c4a8-be1b-5e5d-83f9-f499717bb682",
+            "39e419ff-ea85-5b31-8da7-9a058b4c0c9a",
+            "8104f584-ebbe-55f7-ac6b-03af42e58a52",
+            "9e4f984c-8134-590c-9bb3-8bf710cc8b85",
+            "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d"
+          ],
+          "category": "credit",
+          "amount_cents": -200000,
+          "owner": "billing",
+          "explanation": "Latest known credit revision reduces the invoice cohort"
+        },
+        {
+          "invoice_id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+          "tenant": "northstar",
+          "entity": "US",
+          "currency": "USD",
+          "source_record_ids": [
+            "0b17c4a8-be1b-5e5d-83f9-f499717bb682",
+            "39e419ff-ea85-5b31-8da7-9a058b4c0c9a",
+            "8104f584-ebbe-55f7-ac6b-03af42e58a52",
+            "9e4f984c-8134-590c-9bb3-8bf710cc8b85",
+            "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d"
+          ],
+          "category": "proration",
+          "amount_cents": 150000,
+          "owner": "billing",
+          "explanation": "Explicit source charge; not inferred recurring ARR"
+        },
+        {
+          "invoice_id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+          "tenant": "northstar",
+          "entity": "US",
+          "currency": "USD",
+          "source_record_ids": [
+            "0b17c4a8-be1b-5e5d-83f9-f499717bb682",
+            "39e419ff-ea85-5b31-8da7-9a058b4c0c9a",
+            "8104f584-ebbe-55f7-ac6b-03af42e58a52",
+            "9e4f984c-8134-590c-9bb3-8bf710cc8b85",
+            "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d"
+          ],
+          "category": "unposted_adjustment_requires_review",
+          "amount_cents": -150000,
+          "owner": "finance",
+          "explanation": "Possible timing or missing posting; no assertion of benign lag without review"
+        },
+        {
+          "invoice_id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+          "tenant": "northstar",
+          "entity": "US",
+          "currency": "USD",
+          "source_record_ids": [
+            "0b17c4a8-be1b-5e5d-83f9-f499717bb682",
+            "39e419ff-ea85-5b31-8da7-9a058b4c0c9a",
+            "8104f584-ebbe-55f7-ac6b-03af42e58a52",
+            "9e4f984c-8134-590c-9bb3-8bf710cc8b85",
+            "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d"
+          ],
+          "category": "unsettled_invoice_balance",
+          "amount_cents": 1750000,
+          "owner": "accounts_receivable",
+          "explanation": "Issued invoice cohort less matched allocations; not revenue uplift"
+        }
+      ],
+      "backdated_correction_lineage": [
+        {
+          "source": "stripe",
+          "event_id": "billing-credit-v2",
+          "corrects_event": "billing-credit-v1",
+          "revision": 2,
+          "effective_date": "2026-01-15",
+          "observed_source_at": "2026-02-15T12:00:00+00:00"
+        },
+        {
+          "source": "netsuite",
+          "event_id": "finance-credit-v2",
+          "corrects_event": "finance-credit-v1",
+          "revision": 2,
+          "effective_date": "2026-01-15",
+          "observed_source_at": "2026-02-15T12:00:00+00:00"
+        }
+      ],
+      "unbilled_commitments": [
+        {
+          "tenant": "northstar",
+          "entity": "US",
+          "contract_id": "800-synthetic-3",
+          "reason": "ambiguous_or_missing_mapping",
+          "scheduled_quarter_cents": 540000
+        }
+      ]
+    },
+    "state": "review_required"
+  },
+  "source_snapshot": {
+    "schema_version": "financial-snapshot.v1",
+    "scopes": [
+      [
+        "northstar",
+        "US"
+      ],
+      [
+        "northstar",
+        "EU"
+      ]
+    ],
+    "period": {
+      "start": "2026-01-01",
+      "end_exclusive": "2026-04-01",
+      "known_at": "2026-03-31T23:59:59+00:00"
+    },
+    "snapshots": [
+      {
+        "service": "salesforce",
+        "tenant": "northstar",
+        "entity": "US",
+        "complete_local_snapshot": true,
+        "contents": {
+          "accounts": [
+            {
+              "Id": "001-synthetic-1",
+              "Name": "Synthetic US 001-synthetic-1",
+              "OwnerId": "005-owner-US"
+            },
+            {
+              "Id": "001-synthetic-3",
+              "Name": "Synthetic US 001-synthetic-3",
+              "OwnerId": "005-owner-US"
+            }
+          ],
+          "contracts": [
+            {
+              "entity": "US",
+              "tenant": "northstar",
+              "currency": "USD",
+              "quantity": 4,
+              "account_id": "001-synthetic-3",
+              "contract_id": "800-synthetic-3",
+              "effective_end": "2027-01-01",
+              "effective_start": "2026-01-01",
+              "unit_monthly_cents": 45000
+            },
+            {
+              "entity": "US",
+              "tenant": "northstar",
+              "currency": "USD",
+              "quantity": 8,
+              "account_id": "001-synthetic-1",
+              "contract_id": "800-synthetic-1",
+              "effective_end": "2027-01-01",
+              "effective_start": "2026-01-01",
+              "unit_monthly_cents": 125000
+            }
+          ],
+          "events": [
+            {
+              "stage": "Closed Won",
+              "entity": "US",
+              "source": "salesforce",
+              "tenant": "northstar",
+              "currency": "USD",
+              "event_at": "2025-12-20T14:00:00+00:00",
+              "event_id": "sf-event-1-v1",
+              "owner_id": "005-owner-US",
+              "quantity": 8,
+              "revision": 1,
+              "account_id": "001-synthetic-1",
+              "contract_id": "800-synthetic-1",
+              "term_months": 12,
+              "correction_of": null,
+              "effective_end": "2027-01-01",
+              "billing_months": 3,
+              "opportunity_id": "006-synthetic-1",
+              "schema_version": "commercial.v1",
+              "effective_start": "2026-01-01",
+              "unit_monthly_cents": 125000
+            },
+            {
+              "stage": "Closed Won",
+              "entity": "US",
+              "source": "salesforce",
+              "tenant": "northstar",
+              "currency": "USD",
+              "event_at": "2025-12-20T14:00:00+00:00",
+              "event_id": "sf-event-3-v1",
+              "owner_id": "005-owner-US",
+              "quantity": 4,
+              "revision": 1,
+              "account_id": "001-synthetic-3",
+              "contract_id": "800-synthetic-3",
+              "term_months": 12,
+              "correction_of": null,
+              "effective_end": "2027-01-01",
+              "billing_months": 3,
+              "opportunity_id": "006-synthetic-3",
+              "schema_version": "commercial.v1",
+              "effective_start": "2026-01-01",
+              "unit_monthly_cents": 45000
+            }
+          ],
+          "opportunities": [
+            {
+              "stage": "Closed Won",
+              "entity": "US",
+              "source": "salesforce",
+              "tenant": "northstar",
+              "currency": "USD",
+              "event_at": "2025-12-20T14:00:00+00:00",
+              "event_id": "sf-event-1-v1",
+              "owner_id": "005-owner-US",
+              "quantity": 8,
+              "revision": 1,
+              "account_id": "001-synthetic-1",
+              "contract_id": "800-synthetic-1",
+              "term_months": 12,
+              "correction_of": null,
+              "effective_end": "2027-01-01",
+              "billing_months": 3,
+              "opportunity_id": "006-synthetic-1",
+              "schema_version": "commercial.v1",
+              "effective_start": "2026-01-01",
+              "unit_monthly_cents": 125000
+            },
+            {
+              "stage": "Closed Won",
+              "entity": "US",
+              "source": "salesforce",
+              "tenant": "northstar",
+              "currency": "USD",
+              "event_at": "2025-12-20T14:00:00+00:00",
+              "event_id": "sf-event-3-v1",
+              "owner_id": "005-owner-US",
+              "quantity": 4,
+              "revision": 1,
+              "account_id": "001-synthetic-3",
+              "contract_id": "800-synthetic-3",
+              "term_months": 12,
+              "correction_of": null,
+              "effective_end": "2027-01-01",
+              "billing_months": 3,
+              "opportunity_id": "006-synthetic-3",
+              "schema_version": "commercial.v1",
+              "effective_start": "2026-01-01",
+              "unit_monthly_cents": 45000
+            }
+          ]
+        },
+        "content_hash": "7fa92652a43c8fe44e65d6a442e47a29c64be6044626233386c5a524f205dd06"
+      },
+      {
+        "service": "stripe",
+        "tenant": "northstar",
+        "entity": "US",
+        "complete_local_snapshot": true,
+        "contents": {
+          "records": [
+            {
+              "id": "0b17c4a8-be1b-5e5d-83f9-f499717bb682",
+              "kind": "payment_allocation",
+              "entity": "US",
+              "tenant": "northstar",
+              "currency": "USD",
+              "customer": "cus-synthetic-1",
+              "invoice_id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+              "payment_id": "payment-1",
+              "amount_cents": 1200000,
+              "payment_date": "2026-01-10",
+              "source_event": "sf-event-1-v1",
+              "source_revision": 1,
+              "canonical_account": "canonical-1"
+            },
+            {
+              "id": "39e419ff-ea85-5b31-8da7-9a058b4c0c9a",
+              "kind": "invoice_line",
+              "entity": "US",
+              "tenant": "northstar",
+              "item_id": "bd5fbc43-3e15-5270-b380-8c876f4e5ee1",
+              "currency": "USD",
+              "customer": "cus-synthetic-1",
+              "invoice_id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+              "amount_cents": 3000000,
+              "source_event": "sf-event-1-v1",
+              "service_months": 3,
+              "source_revision": 1,
+              "canonical_account": "canonical-1"
+            },
+            {
+              "id": "5acfdd63-f0b7-5a3c-86ab-c4479154043d",
+              "kind": "subscription",
+              "entity": "US",
+              "status": "active",
+              "tenant": "northstar",
+              "currency": "USD",
+              "customer": "cus-synthetic-1",
+              "contract_id": "800-synthetic-1",
+              "source_event": "sf-event-1-v1",
+              "effective_end": "2027-01-01",
+              "effective_start": "2026-01-01",
+              "source_revision": 1,
+              "canonical_account": "canonical-1",
+              "billing_interval_months": 3
+            },
+            {
+              "id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+              "kind": "invoice",
+              "entity": "US",
+              "status": "open",
+              "tenant": "northstar",
+              "currency": "USD",
+              "customer": "cus-synthetic-1",
+              "amount_cents": 3000000,
+              "invoice_date": "2026-01-01",
+              "source_event": "sf-event-1-v1",
+              "source_revision": 1,
+              "subscription_id": "5acfdd63-f0b7-5a3c-86ab-c4479154043d",
+              "canonical_account": "canonical-1"
+            },
+            {
+              "id": "bd5fbc43-3e15-5270-b380-8c876f4e5ee1",
+              "kind": "subscription_item",
+              "entity": "US",
+              "tenant": "northstar",
+              "currency": "USD",
+              "customer": "cus-synthetic-1",
+              "quantity": 8,
+              "source_event": "sf-event-1-v1",
+              "monthly_cents": 1000000,
+              "source_revision": 1,
+              "subscription_id": "5acfdd63-f0b7-5a3c-86ab-c4479154043d",
+              "canonical_account": "canonical-1",
+              "unit_monthly_cents": 125000
+            },
+            {
+              "id": "payment-1",
+              "kind": "payment",
+              "entity": "US",
+              "source": "synthetic-bank-settlement.v1",
+              "tenant": "northstar",
+              "currency": "USD",
+              "customer": "cus-synthetic-1",
+              "amount_cents": 1200000,
+              "payment_date": "2026-01-10"
+            },
+            {
+              "id": "payment-3",
+              "kind": "payment",
+              "entity": "US",
+              "source": "synthetic-bank-settlement.v1",
+              "tenant": "northstar",
+              "currency": "USD",
+              "customer": "cus-synthetic-3",
+              "amount_cents": 450000,
+              "payment_date": "2026-01-10"
+            }
+          ],
+          "source_events": [
+            {
+              "kind": "credit",
+              "entity": "US",
+              "reason": "Synthetic credit correction",
+              "tenant": "northstar",
+              "currency": "USD",
+              "event_id": "billing-credit-v2",
+              "revision": 2,
+              "invoice_id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+              "logical_id": "billing-credit",
+              "amount_cents": 200000,
+              "corrects_event": "billing-credit-v1",
+              "effective_date": "2026-01-15",
+              "schema_version": "financial-adjustment.v1",
+              "observed_source_at": "2026-02-15T12:00:00+00:00"
+            },
+            {
+              "kind": "credit",
+              "entity": "US",
+              "reason": "Synthetic service adjustment",
+              "tenant": "northstar",
+              "currency": "USD",
+              "event_id": "billing-credit-v1",
+              "revision": 1,
+              "invoice_id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+              "logical_id": "billing-credit",
+              "amount_cents": 100000,
+              "corrects_event": null,
+              "effective_date": "2026-01-15",
+              "schema_version": "financial-adjustment.v1",
+              "observed_source_at": "2026-01-20T12:00:00+00:00"
+            },
+            {
+              "kind": "proration",
+              "entity": "US",
+              "reason": "Synthetic service adjustment",
+              "tenant": "northstar",
+              "currency": "USD",
+              "event_id": "billing-proration-v1",
+              "revision": 1,
+              "invoice_id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+              "logical_id": "billing-proration",
+              "amount_cents": 150000,
+              "corrects_event": null,
+              "effective_date": "2026-01-15",
+              "schema_version": "financial-adjustment.v1",
+              "observed_source_at": "2026-01-20T12:00:00+00:00"
+            }
+          ]
+        },
+        "content_hash": "fbb77cfbb98a812bc5d890dc70d0a0b5c10b2a44715d63a94c1168d46827d8d6"
+      },
+      {
+        "service": "netsuite",
+        "tenant": "northstar",
+        "entity": "US",
+        "complete_local_snapshot": true,
+        "contents": {
+          "records": [
+            {
+              "id": "8104f584-ebbe-55f7-ac6b-03af42e58a52",
+              "kind": "payment_application",
+              "entity": "US",
+              "tenant": "northstar",
+              "currency": "USD",
+              "customer": "ns-synthetic-1",
+              "invoice_id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+              "amount_cents": 1200000,
+              "posting_date": "2026-01-10",
+              "source_event": "sf-event-1-v1",
+              "allocation_id": "0b17c4a8-be1b-5e5d-83f9-f499717bb682",
+              "source_revision": 1,
+              "canonical_account": "canonical-1"
+            },
+            {
+              "id": "9e4f984c-8134-590c-9bb3-8bf710cc8b85",
+              "kind": "posting",
+              "entity": "US",
+              "tenant": "northstar",
+              "currency": "USD",
+              "customer": "ns-synthetic-1",
+              "invoice_id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+              "amount_cents": 3000000,
+              "posting_date": "2026-01-01",
+              "posting_type": "invoice_not_revenue_recognition",
+              "source_event": "sf-event-1-v1",
+              "debit_account": "accounts_receivable",
+              "credit_account": "deferred_revenue",
+              "source_revision": 1,
+              "canonical_account": "canonical-1"
+            }
+          ],
+          "source_events": [
+            {
+              "kind": "credit_posting",
+              "entity": "US",
+              "reason": "Synthetic credit correction",
+              "tenant": "northstar",
+              "currency": "USD",
+              "event_id": "finance-credit-v2",
+              "revision": 2,
+              "invoice_id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+              "logical_id": "finance-credit",
+              "amount_cents": 200000,
+              "corrects_event": "finance-credit-v1",
+              "effective_date": "2026-01-15",
+              "schema_version": "financial-adjustment.v1",
+              "observed_source_at": "2026-02-15T12:00:00+00:00"
+            },
+            {
+              "kind": "credit_posting",
+              "entity": "US",
+              "reason": "Synthetic service adjustment",
+              "tenant": "northstar",
+              "currency": "USD",
+              "event_id": "finance-credit-v1",
+              "revision": 1,
+              "invoice_id": "ac7f5ebf-05fd-5d85-af36-d4b2fa3e1b2d",
+              "logical_id": "finance-credit",
+              "amount_cents": 100000,
+              "corrects_event": null,
+              "effective_date": "2026-01-15",
+              "schema_version": "financial-adjustment.v1",
+              "observed_source_at": "2026-01-20T12:00:00+00:00"
+            }
+          ]
+        },
+        "content_hash": "ccd7a42ae921011f8ee5b861295fba1e495e1dd5d513d46637f6fdff68822994"
+      },
+      {
+        "service": "salesforce",
+        "tenant": "northstar",
+        "entity": "EU",
+        "complete_local_snapshot": true,
+        "contents": {
+          "accounts": [
+            {
+              "Id": "001-synthetic-2",
+              "Name": "Synthetic EU 001-synthetic-2",
+              "OwnerId": "005-owner-EU"
+            }
+          ],
+          "contracts": [
+            {
+              "entity": "EU",
+              "tenant": "northstar",
+              "currency": "USD",
+              "quantity": 5,
+              "account_id": "001-synthetic-2",
+              "contract_id": "800-synthetic-2",
+              "effective_end": "2027-01-01",
+              "effective_start": "2026-01-01",
+              "unit_monthly_cents": 80000
+            }
+          ],
+          "events": [
+            {
+              "stage": "Closed Won",
+              "entity": "EU",
+              "source": "salesforce",
+              "tenant": "northstar",
+              "currency": "USD",
+              "event_at": "2025-12-20T14:00:00+00:00",
+              "event_id": "sf-event-2-v1",
+              "owner_id": "005-owner-EU",
+              "quantity": 5,
+              "revision": 1,
+              "account_id": "001-synthetic-2",
+              "contract_id": "800-synthetic-2",
+              "term_months": 12,
+              "correction_of": null,
+              "effective_end": "2027-01-01",
+              "billing_months": 3,
+              "opportunity_id": "006-synthetic-2",
+              "schema_version": "commercial.v1",
+              "effective_start": "2026-01-01",
+              "unit_monthly_cents": 80000
+            }
+          ],
+          "opportunities": [
+            {
+              "stage": "Closed Won",
+              "entity": "EU",
+              "source": "salesforce",
+              "tenant": "northstar",
+              "currency": "USD",
+              "event_at": "2025-12-20T14:00:00+00:00",
+              "event_id": "sf-event-2-v1",
+              "owner_id": "005-owner-EU",
+              "quantity": 5,
+              "revision": 1,
+              "account_id": "001-synthetic-2",
+              "contract_id": "800-synthetic-2",
+              "term_months": 12,
+              "correction_of": null,
+              "effective_end": "2027-01-01",
+              "billing_months": 3,
+              "opportunity_id": "006-synthetic-2",
+              "schema_version": "commercial.v1",
+              "effective_start": "2026-01-01",
+              "unit_monthly_cents": 80000
+            }
+          ]
+        },
+        "content_hash": "9c5c98f5f5ec43bc02a16eb16429475973231443953171a7fd5941cb66d8454b"
+      },
+      {
+        "service": "stripe",
+        "tenant": "northstar",
+        "entity": "EU",
+        "complete_local_snapshot": true,
+        "contents": {
+          "records": [
+            {
+              "id": "0a7582c6-f511-51e3-9722-a9229336d345",
+              "kind": "invoice_line",
+              "entity": "EU",
+              "tenant": "northstar",
+              "item_id": "693dd1f0-25df-5827-b0de-b9e522bd71cd",
+              "currency": "USD",
+              "customer": "cus-synthetic-2",
+              "invoice_id": "24cec645-3bae-5926-a5f7-cad16f995ad2",
+              "amount_cents": 1200000,
+              "source_event": "sf-event-2-v1",
+              "service_months": 3,
+              "source_revision": 1,
+              "canonical_account": "canonical-2"
+            },
+            {
+              "id": "24cec645-3bae-5926-a5f7-cad16f995ad2",
+              "kind": "invoice",
+              "entity": "EU",
+              "status": "open",
+              "tenant": "northstar",
+              "currency": "USD",
+              "customer": "cus-synthetic-2",
+              "amount_cents": 1200000,
+              "invoice_date": "2026-01-01",
+              "source_event": "sf-event-2-v1",
+              "source_revision": 1,
+              "subscription_id": "b4cd9c96-d642-511f-b117-85613fa3d3d9",
+              "canonical_account": "canonical-2"
+            },
+            {
+              "id": "693dd1f0-25df-5827-b0de-b9e522bd71cd",
+              "kind": "subscription_item",
+              "entity": "EU",
+              "tenant": "northstar",
+              "currency": "USD",
+              "customer": "cus-synthetic-2",
+              "quantity": 5,
+              "source_event": "sf-event-2-v1",
+              "monthly_cents": 400000,
+              "source_revision": 1,
+              "subscription_id": "b4cd9c96-d642-511f-b117-85613fa3d3d9",
+              "canonical_account": "canonical-2",
+              "unit_monthly_cents": 80000
+            },
+            {
+              "id": "95274257-9baa-50ce-8c60-9cadb34b8728",
+              "kind": "payment_allocation",
+              "entity": "EU",
+              "tenant": "northstar",
+              "currency": "USD",
+              "customer": "cus-synthetic-2",
+              "invoice_id": "24cec645-3bae-5926-a5f7-cad16f995ad2",
+              "payment_id": "payment-2",
+              "amount_cents": 450000,
+              "payment_date": "2026-01-10",
+              "source_event": "sf-event-2-v1",
+              "source_revision": 1,
+              "canonical_account": "canonical-2"
+            },
+            {
+              "id": "b4cd9c96-d642-511f-b117-85613fa3d3d9",
+              "kind": "subscription",
+              "entity": "EU",
+              "status": "active",
+              "tenant": "northstar",
+              "currency": "USD",
+              "customer": "cus-synthetic-2",
+              "contract_id": "800-synthetic-2",
+              "source_event": "sf-event-2-v1",
+              "effective_end": "2027-01-01",
+              "effective_start": "2026-01-01",
+              "source_revision": 1,
+              "canonical_account": "canonical-2",
+              "billing_interval_months": 3
+            },
+            {
+              "id": "payment-2",
+              "kind": "payment",
+              "entity": "EU",
+              "source": "synthetic-bank-settlement.v1",
+              "tenant": "northstar",
+              "currency": "USD",
+              "customer": "cus-synthetic-2",
+              "amount_cents": 450000,
+              "payment_date": "2026-01-10"
+            }
+          ],
+          "source_events": []
+        },
+        "content_hash": "1dd2876fea2155bed0812c43831745015a40ff3b4214525fd51e3270a8c19489"
+      },
+      {
+        "service": "netsuite",
+        "tenant": "northstar",
+        "entity": "EU",
+        "complete_local_snapshot": true,
+        "contents": {
+          "records": [
+            {
+              "id": "7fc99d2d-2552-58db-aaee-cf3b9b782ba3",
+              "kind": "payment_application",
+              "entity": "EU",
+              "tenant": "northstar",
+              "currency": "USD",
+              "customer": "ns-synthetic-2",
+              "invoice_id": "24cec645-3bae-5926-a5f7-cad16f995ad2",
+              "amount_cents": 450000,
+              "posting_date": "2026-01-10",
+              "source_event": "sf-event-2-v1",
+              "allocation_id": "95274257-9baa-50ce-8c60-9cadb34b8728",
+              "source_revision": 1,
+              "canonical_account": "canonical-2"
+            },
+            {
+              "id": "862dcaad-53b4-5afd-a352-af47553e15ae",
+              "kind": "posting",
+              "entity": "EU",
+              "tenant": "northstar",
+              "currency": "USD",
+              "customer": "ns-synthetic-2",
+              "invoice_id": "24cec645-3bae-5926-a5f7-cad16f995ad2",
+              "amount_cents": 1200000,
+              "posting_date": "2026-01-01",
+              "posting_type": "invoice_not_revenue_recognition",
+              "source_event": "sf-event-2-v1",
+              "debit_account": "accounts_receivable",
+              "credit_account": "deferred_revenue",
+              "source_revision": 1,
+              "canonical_account": "canonical-2"
+            }
+          ],
+          "source_events": []
+        },
+        "content_hash": "212e7810621d04d86bea81ef19d2411b63c05415571b5193cf7fb61c125f3312"
+      }
+    ],
+    "mappings": [
+      {
+        "tenant": "northstar",
+        "entity": "EU",
+        "canonical_account": "canonical-2",
+        "source": "netsuite",
+        "source_id": "ns-synthetic-2",
+        "revision": 1,
+        "status": "approved",
+        "provenance": "synthetic-reviewed-map.v1"
+      },
+      {
+        "tenant": "northstar",
+        "entity": "EU",
+        "canonical_account": "canonical-2",
+        "source": "salesforce",
+        "source_id": "001-synthetic-2",
+        "revision": 1,
+        "status": "approved",
+        "provenance": "synthetic-reviewed-map.v1"
+      },
+      {
+        "tenant": "northstar",
+        "entity": "EU",
+        "canonical_account": "canonical-2",
+        "source": "stripe",
+        "source_id": "cus-synthetic-2",
+        "revision": 1,
+        "status": "approved",
+        "provenance": "synthetic-reviewed-map.v1"
+      },
+      {
+        "tenant": "northstar",
+        "entity": "US",
+        "canonical_account": "ambiguous-other",
+        "source": "salesforce",
+        "source_id": "001-synthetic-3",
+        "revision": 1,
+        "status": "approved",
+        "provenance": "synthetic-ambiguity-negative-case"
+      },
+      {
+        "tenant": "northstar",
+        "entity": "US",
+        "canonical_account": "canonical-1",
+        "source": "netsuite",
+        "source_id": "ns-synthetic-1",
+        "revision": 1,
+        "status": "approved",
+        "provenance": "synthetic-reviewed-map.v1"
+      },
+      {
+        "tenant": "northstar",
+        "entity": "US",
+        "canonical_account": "canonical-1",
+        "source": "salesforce",
+        "source_id": "001-synthetic-1",
+        "revision": 1,
+        "status": "approved",
+        "provenance": "synthetic-reviewed-map.v1"
+      },
+      {
+        "tenant": "northstar",
+        "entity": "US",
+        "canonical_account": "canonical-1",
+        "source": "stripe",
+        "source_id": "cus-synthetic-1",
+        "revision": 1,
+        "status": "approved",
+        "provenance": "synthetic-reviewed-map.v1"
+      },
+      {
+        "tenant": "northstar",
+        "entity": "US",
+        "canonical_account": "canonical-3",
+        "source": "netsuite",
+        "source_id": "ns-synthetic-3",
+        "revision": 1,
+        "status": "approved",
+        "provenance": "synthetic-reviewed-map.v1"
+      },
+      {
+        "tenant": "northstar",
+        "entity": "US",
+        "canonical_account": "canonical-3",
+        "source": "salesforce",
+        "source_id": "001-synthetic-3",
+        "revision": 1,
+        "status": "approved",
+        "provenance": "synthetic-reviewed-map.v1"
+      },
+      {
+        "tenant": "northstar",
+        "entity": "US",
+        "canonical_account": "canonical-3",
+        "source": "stripe",
+        "source_id": "cus-synthetic-3",
+        "revision": 1,
+        "status": "approved",
+        "provenance": "synthetic-reviewed-map.v1"
+      }
+    ]
+  },
+  "source_snapshot_hash": "a03682adad3b64a85fe15a8536f2bfeaffc54c95c8104e115df7e89b97638123",
+  "source_event_receipts": [
+    {
+      "event_id": "billing-credit-v1",
+      "duplicate": false,
+      "hash": "2ee4d2bc14025b1768e43c9b9da7362c64c9681d78e3f3aea2140c82679186a4"
+    },
+    {
+      "event_id": "billing-credit-v1",
+      "duplicate": true,
+      "hash": "2ee4d2bc14025b1768e43c9b9da7362c64c9681d78e3f3aea2140c82679186a4"
+    },
+    {
+      "event_id": "billing-credit-v2",
+      "duplicate": false,
+      "hash": "03c2f9ec53d006afa958ee78fd93040ea3f38946a0c111abcf60aee730ad69fd"
+    },
+    {
+      "event_id": "finance-credit-v1",
+      "duplicate": false,
+      "hash": "bb960c0a2888d2d12ab699e760d03eaaf3263611340de5feda2b6ba80e57f7b0"
+    },
+    {
+      "event_id": "finance-credit-v1",
+      "duplicate": true,
+      "hash": "bb960c0a2888d2d12ab699e760d03eaaf3263611340de5feda2b6ba80e57f7b0"
+    },
+    {
+      "event_id": "finance-credit-v2",
+      "duplicate": false,
+      "hash": "417a6d442105614d3e3ad59398807e362984f513fa565709c6663245366191d4"
+    },
+    {
+      "event_id": "billing-proration-v1",
+      "duplicate": false,
+      "hash": "6cbe7266ffc008fdb51edf4470f27dcdedc4bd2cea01a8bfb07cce6a35d6ed57"
+    }
+  ],
+  "baseline_dbt": {
+    "models": 4,
+    "tests": 18,
+    "period_rows": [
+      {
+        "tenant": "northstar",
+        "entity": "EU",
+        "currency": "USD",
+        "expected_invoice_cents": 1200000,
+        "billing_net_cents": 1200000,
+        "erp_net_cents": 1200000,
+        "allocated_cash_cents": 450000,
+        "period_end_arr_cents": 4800000
+      },
+      {
+        "tenant": "northstar",
+        "entity": "US",
+        "currency": "USD",
+        "expected_invoice_cents": 3000000,
+        "billing_net_cents": 3000000,
+        "erp_net_cents": 3000000,
+        "allocated_cash_cents": 1200000,
+        "period_end_arr_cents": 12000000
+      }
+    ],
+    "results": [
+      {
+        "id": "model.revenue_integrity.fct_adjustments",
+        "status": "success"
+      },
+      {
+        "id": "model.revenue_integrity.fct_invoices",
+        "status": "success"
+      },
+      {
+        "id": "test.revenue_integrity.adjustment_grain",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_adjustments_event_id.7aff2c073f",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_adjustments_invoice_id.af183a6ae9",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_entity.5c911ced1e",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_expected_base_cents.b365ba3a50",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_header_cents.5d76a1c730",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_invoice_id.52a055ef3f",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_line_cents.62e13d7e34",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_tenant.775a578ab5",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.unique_fct_invoices_invoice_id.d277b7dc5b",
+        "status": "pass"
+      },
+      {
+        "id": "model.revenue_integrity.mart_reconciliation",
+        "status": "success"
+      },
+      {
+        "id": "test.revenue_integrity.financial_grain",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_mart_reconciliation_billing_net_cents.668c8d2c19",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_mart_reconciliation_erp_net_cents.07ebe8229a",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_mart_reconciliation_expected_invoice_cents.0d71f18f7b",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_mart_reconciliation_invoice_id.2cbfc24612",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.unique_mart_reconciliation_invoice_id.11acd91bdb",
+        "status": "pass"
+      },
+      {
+        "id": "model.revenue_integrity.mart_period",
+        "status": "success"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_mart_period_entity.c8422dc49b",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.unique_mart_period_entity.847c45cfc1",
+        "status": "pass"
+      }
+    ]
+  },
+  "corrected_dbt": {
+    "models": 4,
+    "tests": 18,
+    "period_rows": [
+      {
+        "tenant": "northstar",
+        "entity": "EU",
+        "currency": "USD",
+        "expected_invoice_cents": 1200000,
+        "billing_net_cents": 1200000,
+        "erp_net_cents": 1200000,
+        "allocated_cash_cents": 450000,
+        "period_end_arr_cents": 4800000
+      },
+      {
+        "tenant": "northstar",
+        "entity": "US",
+        "currency": "USD",
+        "expected_invoice_cents": 2950000,
+        "billing_net_cents": 2950000,
+        "erp_net_cents": 2800000,
+        "allocated_cash_cents": 1200000,
+        "period_end_arr_cents": 12000000
+      }
+    ],
+    "results": [
+      {
+        "id": "model.revenue_integrity.fct_adjustments",
+        "status": "success"
+      },
+      {
+        "id": "model.revenue_integrity.fct_invoices",
+        "status": "success"
+      },
+      {
+        "id": "test.revenue_integrity.adjustment_grain",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_adjustments_event_id.7aff2c073f",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_adjustments_invoice_id.af183a6ae9",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_entity.5c911ced1e",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_expected_base_cents.b365ba3a50",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_header_cents.5d76a1c730",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_invoice_id.52a055ef3f",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_line_cents.62e13d7e34",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_tenant.775a578ab5",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.unique_fct_invoices_invoice_id.d277b7dc5b",
+        "status": "pass"
+      },
+      {
+        "id": "model.revenue_integrity.mart_reconciliation",
+        "status": "success"
+      },
+      {
+        "id": "test.revenue_integrity.financial_grain",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_mart_reconciliation_billing_net_cents.668c8d2c19",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_mart_reconciliation_erp_net_cents.07ebe8229a",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_mart_reconciliation_expected_invoice_cents.0d71f18f7b",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_mart_reconciliation_invoice_id.2cbfc24612",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.unique_mart_reconciliation_invoice_id.11acd91bdb",
+        "status": "pass"
+      },
+      {
+        "id": "model.revenue_integrity.mart_period",
+        "status": "success"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_mart_period_entity.c8422dc49b",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.unique_mart_period_entity.847c45cfc1",
+        "status": "pass"
+      }
+    ]
+  },
+  "independent_dbt": {
+    "models": 4,
+    "tests": 18,
+    "period_rows": [
+      {
+        "tenant": "northstar",
+        "entity": "EU",
+        "currency": "USD",
+        "expected_invoice_cents": 1200000,
+        "billing_net_cents": 1200000,
+        "erp_net_cents": 1200000,
+        "allocated_cash_cents": 450000,
+        "period_end_arr_cents": 4800000
+      },
+      {
+        "tenant": "northstar",
+        "entity": "US",
+        "currency": "USD",
+        "expected_invoice_cents": 2950000,
+        "billing_net_cents": 2950000,
+        "erp_net_cents": 2800000,
+        "allocated_cash_cents": 1200000,
+        "period_end_arr_cents": 12000000
+      }
+    ],
+    "results": [
+      {
+        "id": "model.revenue_integrity.fct_adjustments",
+        "status": "success"
+      },
+      {
+        "id": "model.revenue_integrity.fct_invoices",
+        "status": "success"
+      },
+      {
+        "id": "test.revenue_integrity.adjustment_grain",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_adjustments_event_id.7aff2c073f",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_adjustments_invoice_id.af183a6ae9",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_entity.5c911ced1e",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_expected_base_cents.b365ba3a50",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_header_cents.5d76a1c730",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_invoice_id.52a055ef3f",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_line_cents.62e13d7e34",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_fct_invoices_tenant.775a578ab5",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.unique_fct_invoices_invoice_id.d277b7dc5b",
+        "status": "pass"
+      },
+      {
+        "id": "model.revenue_integrity.mart_reconciliation",
+        "status": "success"
+      },
+      {
+        "id": "test.revenue_integrity.financial_grain",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_mart_reconciliation_billing_net_cents.668c8d2c19",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_mart_reconciliation_erp_net_cents.07ebe8229a",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_mart_reconciliation_expected_invoice_cents.0d71f18f7b",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_mart_reconciliation_invoice_id.2cbfc24612",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.unique_mart_reconciliation_invoice_id.11acd91bdb",
+        "status": "pass"
+      },
+      {
+        "id": "model.revenue_integrity.mart_period",
+        "status": "success"
+      },
+      {
+        "id": "test.revenue_integrity.not_null_mart_period_entity.c8422dc49b",
+        "status": "pass"
+      },
+      {
+        "id": "test.revenue_integrity.unique_mart_period_entity.847c45cfc1",
+        "status": "pass"
+      }
+    ]
+  },
+  "all_four_models_exact_vs_independent_full": true,
+  "materialization": "full table; no incremental performance claim",
+  "native_vendor_execution": false,
+  "independent_final_audit": "pending"
+}

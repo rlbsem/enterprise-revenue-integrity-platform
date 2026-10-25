@@ -1,0 +1,8 @@
+{
+  "actual_subprocess_terminated": true,
+  "exit_code": 1,
+  "remote_effects_before_kill": 1,
+  "remote_effects_after_restart": 1,
+  "competing_worker": "busy",
+  "recovered_state": "verified"
+}
