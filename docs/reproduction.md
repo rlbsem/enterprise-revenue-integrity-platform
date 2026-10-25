@@ -45,3 +45,23 @@ To check preserved evidence without starting services:
 ```text
 python scripts/check_evidence.py
 ```
+
+## Authenticated browser and accessibility acceptance
+
+The [operator guide](operator-console.md) describes the working flow. The console command creates a fresh private synthetic workspace and generated credentials. Leave it running while inspecting; Ctrl+C stops its owned services and database cluster.
+
+```text
+python -m integrity.console --workspace .local/console-01 --port 8582
+```
+
+Automated browser checks additionally require Node.js 22+ and the pinned package dependencies:
+
+```text
+npx --yes pnpm@11.25.0 install --frozen-lockfile --ignore-scripts
+node node_modules/playwright/cli.js install chromium
+python scripts/verify_browser.py --workspace .local/browser-01 --output .local/browser-evidence-01
+```
+
+On Linux, `playwright install --with-deps chromium` installs the browser's OS dependencies when needed. The verifier starts a separate real console on port 8583, uses private generated credentials, tests both review decisions, waits for independently verified effects and the financial job, captures actual screenshots and exits its owned services. `INTEGRITY_CHROME_PATH` may select an existing Chrome executable; the result records the actual browser version. Do not put private workspace credentials or runner logs in Git.
+
+The screenshot run preserves its actual source revision, timestamps, browser assertions and image hashes. No image is generated from a mock dashboard. Python qualification also freezes source hashes before execution and rejects changed source or skipped required tests.

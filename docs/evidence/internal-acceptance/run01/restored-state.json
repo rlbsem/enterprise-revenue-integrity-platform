@@ -1,0 +1,19 @@
+{
+  "local_postgresql_template_restore": true,
+  "independent_receiver_gate": {
+    "safe_to_resume": false,
+    "issues": [
+      {
+        "destination": "stripe",
+        "effect_id": "336d73b6-823e-5efb-bb59-ff0f647d6a28",
+        "reason": "remote_ahead_missing_intent"
+      },
+      {
+        "destination": "netsuite",
+        "effect_id": "84bf9093-2b6a-5da1-ab21-d071759357ce",
+        "reason": "remote_ahead_missing_intent"
+      }
+    ]
+  },
+  "new_dispatch": "blocked"
+}

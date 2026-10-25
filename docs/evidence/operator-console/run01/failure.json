@@ -1,0 +1,8 @@
+{
+  "source_commit": "9f7ce8105f6d1aa623e1a7e22e6829b9067e41c8",
+  "recorded_at": "2026-10-25T16:16:05.523460+00:00",
+  "qualification": "failed",
+  "reason": "logout assertion issued immediately after click, before asynchronous handler completion",
+  "actual_artifacts": "Unmodified screenshots from the real local console. Not the final qualifying run.",
+  "native_vendor_execution": false
+}
