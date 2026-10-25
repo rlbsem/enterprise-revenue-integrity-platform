@@ -24,6 +24,8 @@ PERIOD = {
 
 
 def extract(controller, scopes, period=None):
+    if not controller.verify_recovery()["safe_to_resume"]:
+        raise Refused("restored_state_reconciliation_required")
     snapshots = []
     for tenant, entity in scopes:
         for source in ("salesforce", "stripe", "netsuite"):
@@ -456,7 +458,18 @@ def build(database, workspace, full_refresh=False):
     }
 
 
-def publish(root, snapshot, rows, fresh_snapshot, fail_before_pointer=False):
+def publish(root, snapshot, rows, fresh_snapshot, fail_before_pointer=False, crash_marker=None):
+    from .publication import exclusive
+
+    with exclusive(root):
+        return _publish_locked(
+            root, snapshot, rows, fresh_snapshot, fail_before_pointer, crash_marker
+        )
+
+
+def _publish_locked(
+    root, snapshot, rows, fresh_snapshot, fail_before_pointer=False, crash_marker=None
+):
     expected = oracle(snapshot)
     if expected != rows:
         raise Refused("independent_financial_parity_failed")
@@ -483,6 +496,22 @@ def publish(root, snapshot, rows, fresh_snapshot, fail_before_pointer=False):
     }
     root = Path(root)
     root.mkdir(parents=True, exist_ok=True)
+    pointer = root / "CURRENT.json"
+    if pointer.exists():
+        saved = json.loads(pointer.read_text(encoding="utf-8"))
+        if (
+            saved.get("file") != saved.get("release", "") + ".json"
+            or len(saved.get("release", "")) != 64
+            or any(c not in "0123456789abcdef" for c in saved["release"])
+        ):
+            raise Refused("invalid_previous_release_pointer")
+        previous = json.loads((root / saved["file"]).read_text(encoding="utf-8"))
+        if digest(previous) != saved["release"]:
+            raise Refused("previous_release_integrity_failed")
+        if previous["period"]["start"] == snapshot["period"]["start"] and datetime.fromisoformat(
+            previous["period"]["known_at"]
+        ) > datetime.fromisoformat(snapshot["period"]["known_at"]):
+            raise Refused("historical_release_requires_archive_path")
     data = (json.dumps(result, sort_keys=True, indent=2) + "\n").encode()
     release = digest(result)
     destination = root / (release + ".json")
@@ -494,6 +523,12 @@ def publish(root, snapshot, rows, fresh_snapshot, fail_before_pointer=False):
         os.replace(temporary_release, destination)
     if fail_before_pointer:
         raise Refused("controlled_publication_interruption")
+    if crash_marker:
+        import time
+
+        Path(crash_marker).write_text("staged_before_pointer")
+        while True:
+            time.sleep(0.1)
     temporary = root / "CURRENT.pending"
     temporary.write_bytes(
         (json.dumps({"release": release, "file": destination.name}) + "\n").encode()

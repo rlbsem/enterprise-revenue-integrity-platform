@@ -3,6 +3,7 @@
 import json
 import time
 from pathlib import Path
+from uuid import uuid4
 
 import httpx
 import psycopg
@@ -10,7 +11,7 @@ from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
 
 from .contracts import Commercial, Effect, digest, key
-from .db import connect, lock
+from .db import connect, lock, coordinated
 
 
 class Refused(ValueError):
@@ -155,6 +156,7 @@ class Controller:
         )
         return effect.effect_id
 
+    @coordinated
     def ingest(self, document):
         if document.get("schema_version") == "contract-change.v1":
             from .lifecycle import ingest
@@ -266,6 +268,7 @@ class Controller:
                 raise Refused("independent_record_readback_mismatch")
         return proof
 
+    @coordinated
     def step(self, effect_id, timeout=2, crash_marker=None):
         # Session lock survives attempt commits; a real process death releases it.
         # No lease takeover while an old worker is alive: simpler safety, less concurrency.
@@ -275,9 +278,19 @@ class Controller:
             ).fetchone()["held"]
             if not got:
                 return "busy"
+            owner = str(uuid4())
+            claim = session.execute(
+                "UPDATE outbox SET fence=fence+1,lease_owner=%s,lease_until=clock_timestamp()+interval '30 seconds' WHERE effect_id=%s RETURNING fence",
+                (owner, effect_id),
+            ).fetchone()
             try:
                 return self._step(session, effect_id, timeout, crash_marker)
             finally:
+                if claim:
+                    session.execute(
+                        "UPDATE outbox SET lease_owner=NULL,lease_until=NULL WHERE effect_id=%s AND fence=%s AND lease_owner=%s",
+                        (effect_id, claim["fence"], owner),
+                    )
                 session.execute(
                     "SELECT pg_advisory_unlock(hashtextextended(%s,1))", (str(effect_id),)
                 )
@@ -295,9 +308,12 @@ class Controller:
                 if proof is None:
                     if row["status"] in ("blocked", "exhausted"):
                         return row["status"]
-                    if row["attempts"] >= 3:
+                    if row["attempts"] >= row["max_attempts"]:
                         return self.mark(row, "exhausted", "retry_budget_exhausted")
                     with connect(self.dsn) as c:
+                        from .operations import check_grant
+
+                        check_grant(c, row)
                         event = c.execute(
                             "SELECT body FROM inbox WHERE tenant=%s AND event_id=%s",
                             (row["tenant"], row["event_id"]),
@@ -309,6 +325,9 @@ class Controller:
                             or mapped[row["destination"]] != row["payload"]["destination_customer"]
                         ):
                             raise Refused("mapping_changed_replan_required")
+                    recovery = self.verify_recovery()
+                    if not recovery["safe_to_resume"]:
+                        raise Refused("recovery_gate:" + recovery["issues"][0]["reason"])
                     with session.transaction():
                         session.execute(
                             "UPDATE outbox SET attempts=attempts+1 WHERE effect_id=%s", (effect_id,)
@@ -339,10 +358,12 @@ class Controller:
                         "SELECT body FROM inbox WHERE tenant=%s AND event_id=%s",
                         (row["tenant"], row["event_id"]),
                     ).fetchone()["body"]
-                    c.execute(
-                        "UPDATE outbox SET status='verified',proof=%s,detail='independent_receipt_and_records' WHERE effect_id=%s",
-                        (Jsonb(proof), effect_id),
-                    )
+                    changed = c.execute(
+                        "UPDATE outbox SET status='verified',proof=%s,detail='independent_receipt_and_records' WHERE effect_id=%s AND fence=%s AND lease_owner=%s",
+                        (Jsonb(proof), effect_id, row["fence"], row["lease_owner"]),
+                    ).rowcount
+                    if changed != 1:
+                        raise Refused("stale_worker_fence")
                     self.audit(
                         c,
                         event,
@@ -388,16 +409,64 @@ class Controller:
 
     def mark(self, row, status, reason):
         with connect(self.dsn) as c:
-            c.execute(
+            changed = c.execute(
                 "UPDATE outbox SET status=%s,detail=%s,next_at=clock_timestamp()+interval '1 second' * "
-                "least(power(2,attempts),30) WHERE effect_id=%s",
-                (status, reason, row["effect_id"]),
-            )
+                "least(power(2,attempts),30) WHERE effect_id=%s AND fence=%s AND lease_owner IS NOT DISTINCT FROM %s::uuid",
+                (status, reason, row["effect_id"], row["fence"], row["lease_owner"]),
+            ).rowcount
+            if changed != 1:
+                raise Refused("stale_worker_fence")
             event = {"tenant": row["tenant"], "entity": row["entity"], "event_id": row["event_id"]}
             self.audit(c, event, status, str(row["effect_id"]), {"reason": reason})
             if status in ("blocked", "exhausted"):
                 self.exception(c, event, reason, row["effect_id"])
         return status
+
+    def verify_recovery(self):
+        with connect(self.dsn) as c:
+            approved = self.config.get("approved_scopes")
+            if not approved:
+                raise Refused("independent_scope_manifest_required")
+            scopes = [{"tenant": s[0], "entity": s[1]} for s in approved]
+            intents = c.execute("SELECT * FROM outbox").fetchall()
+        issues = []
+        for destination in ("stripe", "netsuite"):
+            observed = {}
+            try:
+                with self.client(destination) as client:
+                    for scope in scopes:
+                        response = client.get("/effect-index", params=scope)
+                        response.raise_for_status()
+                        for receipt in response.json():
+                            if receipt["effect_id"] in observed:
+                                raise Refused("duplicate_receiver_identity")
+                            observed[receipt["effect_id"]] = receipt["payload_hash"]
+            except (httpx.HTTPError, Refused):
+                issues.append(
+                    {"destination": destination, "reason": "receiver_inventory_unavailable"}
+                )
+                continue
+            expected = {str(r["effect_id"]): r for r in intents if r["destination"] == destination}
+            for effect_id, content in observed.items():
+                if effect_id not in expected:
+                    reason = "remote_ahead_missing_intent"
+                elif expected[effect_id]["hash"] != content:
+                    reason = "receiver_intent_content_conflict"
+                else:
+                    continue
+                issues.append(
+                    {"destination": destination, "effect_id": effect_id, "reason": reason}
+                )
+            for effect_id, intent in expected.items():
+                if intent["status"] == "verified" and effect_id not in observed:
+                    issues.append(
+                        {
+                            "destination": destination,
+                            "effect_id": effect_id,
+                            "reason": "verified_remote_effect_missing",
+                        }
+                    )
+        return {"safe_to_resume": not issues, "issues": issues}
 
     def drain(self, due_only=True):
         for _ in range(100):

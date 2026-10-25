@@ -12,9 +12,16 @@ from integrity.db import connect
 
 
 @pytest.fixture(scope="session")
-def lifecycle_run(runtime, tmp_path_factory):
-    runtime.reset()
-    result = execute_lifecycle(runtime, tmp_path_factory.mktemp("lifecycle-acceptance"))
+def lifecycle_env(tmp_path_factory):
+    from integrity.harness import LocalStack
+
+    with LocalStack(tmp_path_factory.mktemp("lifecycle-environment") / "services") as stack:
+        result = execute_lifecycle(stack, tmp_path_factory.mktemp("lifecycle-acceptance"))
+        _capture_lifecycle(result)
+        yield stack, result
+
+
+def _capture_lifecycle(result):
     import json
     import os
     from pathlib import Path
@@ -23,7 +30,11 @@ def lifecycle_run(runtime, tmp_path_factory):
         (Path(os.environ["INTEGRITY_TEST_EVIDENCE"]) / "lifecycle.json").write_bytes(
             (json.dumps(result, indent=2, default=str) + "\n").encode()
         )
-    return result
+
+
+@pytest.fixture(scope="session")
+def lifecycle_run(lifecycle_env):
+    return lifecycle_env[1]
 
 
 def test_lifecycle_financial_and_incremental_full_parity(lifecycle_run):
@@ -72,10 +83,11 @@ def test_all_variance_categories_are_explicit_and_non_additive(lifecycle_run):
     )
 
 
-def test_durable_financial_cases_preserve_variance_and_history(runtime, lifecycle_run):
+def test_durable_financial_cases_preserve_variance_and_history(lifecycle_env, lifecycle_run):
     # lifecycle_run last wrote to the shared runtime; other tests may reset it, so verify via a fresh replay when needed.
     from integrity.ledger import record
 
+    runtime = lifecycle_env[0]
     controller = Controller(runtime.config)
     ids = record(controller, lifecycle_run["source_snapshot"], lifecycle_run["current_release"])
     assert ids == lifecycle_run["durable_financial_runs"]

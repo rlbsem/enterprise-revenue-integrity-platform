@@ -9,7 +9,7 @@ permissions:
 jobs:
   postgres-acceptance:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 25
     services:
       postgres:
         image: postgres:17.11
@@ -33,3 +33,6 @@ jobs:
       - run: python scripts/check_evidence.py
       - run: python scripts/verify.py --workspace .local/ci --output .local/ci-evidence
       - run: python -m pip_audit -r requirements.lock --no-deps --disable-pip --strict
+      - run: npx --yes pnpm@11.25.0 install --frozen-lockfile --ignore-scripts
+      - run: node node_modules/playwright/cli.js install --with-deps chromium
+      - run: python scripts/verify_browser.py --workspace .local/browser-ci --output .local/browser-ci-evidence

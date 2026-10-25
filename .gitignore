@@ -11,3 +11,4 @@ __pycache__/
 *.sqlite*
 dist/
 build/
+node_modules/

@@ -98,6 +98,15 @@ def create_app(kind=None, dsn=None, token=None, injector=None):
             raise HTTPException(404, "not_committed_in_scope")
         return row["receipt"]
 
+    @app.get("/effect-index", dependencies=[Depends(authorized)])
+    def effect_index(tenant: str, entity: str):
+        with connect(dsn) as c:
+            rows = c.execute(
+                "SELECT effect_id,hash FROM effects WHERE tenant=%s AND entity=%s ORDER BY effect_id",
+                (tenant, entity),
+            ).fetchall()
+        return [{"effect_id": str(r["effect_id"]), "payload_hash": r["hash"]} for r in rows]
+
     @app.get("/records/{record_kind}/{record_id}", dependencies=[Depends(authorized)])
     def record(record_kind: str, record_id: str, tenant: str, entity: str):
         with connect(dsn) as c:

@@ -26,6 +26,10 @@ def main():
         raise ValueError("fresh_checkpoint_paths_required")
     work.mkdir(parents=True)
     out.mkdir(parents=True)
+    started_hashes = source_hashes()
+    started_commit = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
+    ).strip()
     os.environ["INTEGRITY_TEST_EVIDENCE"] = str(out)
     run([sys.executable, "-m", "ruff", "check", "src", "scripts", "tests"], work / "lint.log")
     run(
@@ -44,6 +48,14 @@ def main():
         work / "pytest.log",
     )
     suite = ET.parse(work / "junit.xml").getroot().find("testsuite")
+    if (
+        source_hashes() != started_hashes
+        or subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+        != started_commit
+    ):
+        raise ValueError("source_changed_during_acceptance")
+    if int(suite.attrib["skipped"]):
+        raise ValueError("required_acceptance_tests_skipped")
     result = {
         "stage": a.stage,
         "executed_at": datetime.now(UTC).isoformat(),
@@ -53,7 +65,7 @@ def main():
             ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
         ).strip(),
         "source_hash_encoding": "UTF-8 with LF line endings",
-        "source_hashes": source_hashes(),
+        "source_hashes": started_hashes,
         "tests": int(suite.attrib["tests"]),
         "failures": int(suite.attrib["failures"]),
         "errors": int(suite.attrib["errors"]),

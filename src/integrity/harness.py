@@ -16,7 +16,7 @@ from psycopg import sql
 from psycopg.conninfo import make_conninfo
 
 from .db import connect, migrate
-from .fixture import seed
+from .fixture import seed, scenario
 
 
 def free_port():
@@ -33,6 +33,9 @@ class LocalStack:
         self.workspace.mkdir(parents=True)
         self.processes, self.database_names, self.role_names = [], [], []
         self.config, self.admins, self.app_dsns = {}, {}, {}
+        self.config["approved_scopes"] = [
+            list(s) for s in sorted({(e["tenant"], e["entity"]) for e in scenario()})
+        ]
         self.own_cluster = False
 
     def start(self):
@@ -40,10 +43,17 @@ class LocalStack:
             self._database()
             self._services()
             self.events = seed(self.config, self.admins)
-            self.config_path = self.workspace / "runtime.json"
-            self.config_path.write_text(json.dumps(self.config))
+            from .security import install
+
+            install(self)
+            (self.workspace / "runtime.json").write_text(json.dumps(self.config))
+            self.config_path = self.workspace / "worker.json"
+            self.config_path.write_text(
+                json.dumps({k: v for k, v in self.config.items() if k != "operators"})
+            )
             if os.name != "nt":
                 self.config_path.chmod(0o600)
+                (self.workspace / "runtime.json").chmod(0o600)
             return self
         except BaseException:
             self.stop()
@@ -145,6 +155,8 @@ class LocalStack:
                     migrate(admin, "crm_changes")
                 if name == "control":
                     migrate(admin, "ledger")
+                    migrate(admin, "security")
+                    migrate(admin, "jobs")
                 with connect(admin) as db:
                     db.execute("REVOKE CREATE ON SCHEMA public FROM PUBLIC")
                     db.execute(
@@ -166,16 +178,30 @@ class LocalStack:
                             "schema_version",
                             "accounts",
                             "mappings",
+                            "operator_scope",
+                            "operator_users",
                         ):
                             permissions = (
                                 "SELECT,INSERT"
-                                if table in ("audit", "attempts")
+                                if table
+                                in (
+                                    "audit",
+                                    "attempts",
+                                    "financial_runs",
+                                    "financial_case_events",
+                                    "decisions",
+                                    "proposals",
+                                )
                                 else "SELECT,INSERT,UPDATE"
                             )
                         if name in ("stripe", "netsuite") and table != "schema_version":
                             permissions = (
                                 "SELECT,INSERT,UPDATE" if table == "faults" else "SELECT,INSERT"
                             )
+                        if name == "control" and table == "proposals":
+                            permissions = "SELECT,UPDATE"
+                        if name == "control" and table == "decisions":
+                            permissions = "SELECT"
                         db.execute(
                             sql.SQL("GRANT " + permissions + " ON {} TO {}").format(
                                 sql.Identifier(table), sql.Identifier(role)
@@ -255,6 +281,9 @@ class LocalStack:
                     )
                 )
         self.events = seed(self.config, self.admins)
+        from .security import install
+
+        install(self)
 
     def stop(self):
         for process, log in self.processes:

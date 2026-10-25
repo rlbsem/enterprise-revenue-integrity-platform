@@ -5,7 +5,7 @@ from psycopg.types.json import Jsonb
 from .contracts import digest, key
 from .control import Refused
 from .db import connect, lock
-from .finance import oracle
+from .finance import oracle, extract
 
 ACTIONABLE = {
     "activation_lag",
@@ -17,6 +17,8 @@ ACTIONABLE = {
 
 
 def record(controller, snapshot, release):
+    if snapshot != extract(controller, [tuple(s) for s in snapshot["scopes"]], snapshot["period"]):
+        raise Refused("financial_ledger_source_changed")
     if release["source_hash"] != digest(snapshot) or release["rows"] != oracle(snapshot):
         raise Refused("financial_ledger_requires_verified_source_parity")
     results = []

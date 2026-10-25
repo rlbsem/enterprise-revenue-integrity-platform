@@ -21,10 +21,17 @@ def run(command, output):
 
 
 def source_hashes():
-    files = [ROOT / "pyproject.toml", ROOT / "requirements.lock"]
-    for directory in ("src", "tests", "scripts", "dbt"):
+    files = [
+        ROOT / "pyproject.toml",
+        ROOT / "requirements.lock",
+        ROOT / "package.json",
+        ROOT / "pnpm-lock.yaml",
+    ]
+    for directory in ("src", "tests", "scripts", "dbt", "web"):
         files.extend(
-            p for p in (ROOT / directory).rglob("*") if p.suffix in (".py", ".sql", ".yml")
+            p
+            for p in (ROOT / directory).rglob("*")
+            if p.suffix in (".py", ".sql", ".yml", ".js", ".cjs", ".css", ".html")
         )
     return {
         p.relative_to(ROOT).as_posix(): hashlib.sha256(
@@ -46,6 +53,10 @@ def main():
     output.mkdir(parents=True)
     import os
 
+    started_hashes = source_hashes()
+    started_commit = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
+    ).strip()
     os.environ["INTEGRITY_TEST_EVIDENCE"] = str(output)
     run([sys.executable, "-m", "ruff", "check", "src", "tests", "scripts"], workspace / "lint.log")
     run(
@@ -103,6 +114,14 @@ def main():
         ],
         workspace / "finance.log",
     )
+    if (
+        source_hashes() != started_hashes
+        or subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+        != started_commit
+    ):
+        raise ValueError("source_changed_during_acceptance")
+    if int(suite.attrib["skipped"]):
+        raise ValueError("required_acceptance_tests_skipped")
     record = {
         "executed_at": datetime.now(UTC).isoformat(),
         "python": platform.python_version(),
@@ -112,7 +131,7 @@ def main():
         ).strip(),
         "working_tree_source_hashes_authoritative": True,
         "source_hash_encoding": "UTF-8 with LF line endings",
-        "source_hashes": source_hashes(),
+        "source_hashes": started_hashes,
         "test_count": int(suite.attrib["tests"]),
         "failures": int(suite.attrib["failures"]),
         "errors": int(suite.attrib["errors"]),

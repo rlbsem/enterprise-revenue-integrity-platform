@@ -1,4 +1,5 @@
 import pytest
+from test_finance import financial_run as financial_run
 
 from integrity.control import Controller
 from integrity.harness import LocalStack
