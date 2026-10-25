@@ -33,6 +33,8 @@ The corrected output is:
 
 The $1,500 ERP shortfall remains `unposted_adjustment_requires_review`. Missing posting may be timing or an error; this implementation does not label it benign without supporting review. The release remains **review_required**, also carrying the unactivated ambiguous commitment. Passing software/data gates means the discrepancy is faithfully represented, not that the business books reconcile to zero.
 
+[Executed records and exact tests](evidence/pass2/README.md). `observed_source_at` and the March 31 cutoff are synthetic source-history attributes; the actual verification timestamp is recorded separately. They do not assert that this application was running in January–March. Actual server receipt times remain in the PostgreSQL source journal.
+
 ## Evidence, models and independent comparison
 
 The CLI reads complete scoped HTTP exports from each source in a repeatable-read transaction per service, validates exact export content and source/correction coverage, and loads raw records into DuckDB. The services are quiescent during capture/build/publication. There is no global distributed snapshot; a fresh source capture must match before the current release pointer changes.

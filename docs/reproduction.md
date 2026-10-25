@@ -1,6 +1,6 @@
 # Reproduction
 
-Prerequisites: Python 3.12 and PostgreSQL 17 binaries (`initdb`, `pg_ctl`, `postgres`). Install them using your normal OS package manager/official distribution. Do not initialize a server as root on Unix. Run from this repository root in an unprivileged user account.
+Prerequisites: Git (including repository history for source-provenance checks), Python 3.12 and PostgreSQL 17 binaries (`initdb`, `pg_ctl`, `postgres`). Install them using your normal OS package manager/official distribution. Clone the repository normally, without a shallow-history limit. Do not initialize a server as root on Unix. Run from this repository root in an unprivileged user account.
 
 ```text
 python -m venv .venv
@@ -31,6 +31,12 @@ The harness starts a **new owned** SCRAM-authenticated PostgreSQL cluster on a f
 Alternatively, set private `INTEGRITY_ADMIN_DSN` to an **isolated disposable** PostgreSQL 17 test server. The installer requires CREATE DATABASE/ROLE privileges. This path creates random test databases and removes those exact databases and roles at exit. GitHub CI uses an ephemeral PostgreSQL 17.11 service this way. This is destructive only to databases the harness itself created; do not supply a production server.
 
 The JSON demo contains actual persisted source/controller/receiver records and request journals. Verification adds sanitized test outcomes, actual process-termination observations, source-content hashes and an evidence manifest. Raw logs, admin DSNs, service tokens, databases and private runtime files stay under `.local` and are excluded from Git. Do not upload them. Generated records contain synthetic identifiers; review new evidence before publication.
+
+The full verifier also executes the [financial slice](financial-contract.md): source credits/corrections and proration, baseline/corrected/independent DuckDB/dbt builds, full-row comparison and safe JSON publication. To run only that separate lane:
+
+```text
+python -m integrity.finance_demo --workspace .local/finance-01 --output .local/finance-01.json
+```
 
 The code uses loopback HTTP without TLS and random service bearer tokens for finite local testing. It is not configured for public deployment. There is no native Salesforce/Stripe/NetSuite/Snowflake authentication path in this release. Docker is not required; a container-based local run is not yet an executed acceptance claim.
 

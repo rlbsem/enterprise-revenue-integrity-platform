@@ -5,7 +5,7 @@ This ledger records implementation state against Master Roadmap V1.0. It is not 
 | Pass | Scope | State |
 |---|---|---|
 | 1 | Cross-system PostgreSQL/HTTP foundation, identity, durable execution and recovery | Passed: 20 local tests/demo and GitHub CI; evidence checkpoint `adcc4e183c9bde32b2e0c5f5bfec8b718e04ccc0` |
-| 2 | Financial contracts, dbt, 3-Number Truth Test, Variance Bridge, independent oracle | Implemented financial slice under final verification; broader lifecycle/bridge scope remains open |
+| 2 | Financial contracts, dbt, 3-Number Truth Test, Variance Bridge, independent oracle | Verified partial slice: 34 tests, four models/18 dbt tests in each of three builds; broader lifecycle/bridge scope remains open |
 | 3 | Adversarial security/recovery hardening | Pending; author's review is not the independent Astra audit |
 | 4 | Authenticated API-backed operator console and browser acceptance | Pending |
 | 5 | Final package verification and independent architecture/security acceptance | Independent audit pending |
@@ -27,6 +27,8 @@ Foundation checkpoint CI passed: [push run](https://github.com/rlbsem/enterprise
 
 ## Pass 2 financial slice
 
-Actual local development execution has passed four models and 18 dbt tests per build, plus a preliminary 30-test regression. Final qualification is recorded separately after the remaining negative cases. The [financial contract](financial-contract.md) gives the exact scope, calculations, full-build comparison and limitations.
+The final [qualified slice](evidence/pass2/README.md) passed 34 Python tests and three actual dbt builds, each with four models and 18 data tests, at source `85bf1f6af4512a4d5d30dc0287ff1bf74851d0ea`. Every corrected model matched a separate fresh-loaded full warehouse. Independent source-ledger calculations also matched invoice/period values. The earlier verified 33-test financial source checkpoint is `16ca52d77e7a8fbd196161345f9424d47c27e2de`, preserved in `run01`; the latest `run02` adds explicit current-Account verification. The [financial contract](financial-contract.md) gives the exact scope, calculations and limitations.
 
 Open before advancing the complete Pass 2 gate: contract-backed subscription expansion/contraction/cancellation, business-time/SCD corrections, the remaining governed variance categories, and a tested warehouse portability contract. Passes 3–5 have not been marked complete. The author has not performed the separate independent Astra audit.
+
+Continuation must use the existing branch/draft PR and preserve both passes' evidence. Complete those open financial gates before declaring Pass 2 finished or advancing the complete roadmap. No new default dispatch operation or native vendor execution is implied by the analytical source-event slice. No merge or deployment has occurred.

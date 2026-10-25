@@ -1,0 +1,253 @@
+{
+  "executed_at": "2026-10-25T03:45:32.911721+00:00",
+  "python": "3.12.14",
+  "os": "Windows",
+  "source_commit": "85bf1f6af4512a4d5d30dc0287ff1bf74851d0ea",
+  "working_tree_source_hashes_authoritative": true,
+  "source_hash_encoding": "UTF-8 with LF line endings",
+  "source_hashes": {
+    "dbt/dbt_project.yml": "57678e59f6a801724423c38dc321ceb774e9fb558c71cedbe2178d56f22f9f1d",
+    "dbt/models/fct_adjustments.sql": "feb249b5683dc7fc4b7cd9f2b98d03a0837de540865e08cc7ee29db15f94fcec",
+    "dbt/models/fct_invoices.sql": "a0da8ce327bdd97ffcaaac5fc08e6f7a967c319f34924b17bbdf7fecb25c425e",
+    "dbt/models/mart_period.sql": "125ad552faeeeab7f553c36539f2389bdd46661acc717acc784fa160170ee73b",
+    "dbt/models/mart_reconciliation.sql": "66adb835f701570943825348c8f6930307ffbf484b86d9faf3ecc723aa2e63e0",
+    "dbt/models/sources.yml": "71d0718e972c4fb8c65052b58996b605913761ff2e6664103166e9c42bd5fb2e",
+    "dbt/tests/adjustment_grain.sql": "832e6cb5f650004f6b43fdb5e3e91a6490c230ad517c7b17630d2b8fd1b860e6",
+    "dbt/tests/financial_grain.sql": "df9262a1301ed0ae9a19b519a7985272f71f7c3a3e4a3087e93be9d77c527ddc",
+    "pyproject.toml": "d7e992f511f88ff132e8445b6020682f375a1e11fd255851b888dbaf9e6ab834",
+    "requirements.lock": "4f441d6a25218ba9433fbcf5813cbcffa8939ef021c2cea84578bfe16e701ef5",
+    "scripts/check_evidence.py": "976a2deb4cc6dd7b9d9f695a95acbbc9109e8e5467b01d4afc16f51b6e465c16",
+    "scripts/verify.py": "dcfcb6fb994e49a96e302afd58486b4c3c9bf3fcc4f5853637b78e4e5fd6d115",
+    "src/integrity/__init__.py": "90ad230226fc564a5e276dcb75becff7a2bff0b12031b88dc13ca0dbdf57422b",
+    "src/integrity/contracts.py": "a1a65048d248b088ac8114e0cb8a73fcdc441c9d155d61426917419e83472429",
+    "src/integrity/control.py": "62121a49da0c76710b1f91c973d2d337753d4a5ad68a5e2ec5a21e9fc3bfbe3b",
+    "src/integrity/db.py": "e84176e6961f11acd143aee1147d40a0d1198282d67b35630da93f0a226af090",
+    "src/integrity/demo.py": "1988eeb05a3be82a943310ce13cc91f1c68f53b825214cf3a9156a9a67e81db4",
+    "src/integrity/finance.py": "f988c63d7ddbd6170887477f738bb69a090f39595409c1369f11e86c11d3eb92",
+    "src/integrity/finance_demo.py": "57880956466655ffc481c39f5e34715a22d154373a89df223e4b32d25d9d5b7a",
+    "src/integrity/financial_routes.py": "724cb18bbfb4c08ee0ae75557cb324a2350b4ee5e141b607110ef5f43d8f5fd1",
+    "src/integrity/fixture.py": "c0c27c44019705c3e1337eed72a1a9ab397674ec87ee9d4af7422835360558de",
+    "src/integrity/harness.py": "6b1a5f8e559f215e1e7d55b7ec7ef4fe71677e509e4b8b45bf1d361f968307a8",
+    "src/integrity/migrations/control.sql": "87a631811e7040d96934f6c0c8abdc5656728a2ee5f5ae39d1fb688e3b0026a7",
+    "src/integrity/migrations/crm.sql": "6fff5a74b4f23cce03eb6735828edba577466273ac08c7713d1de8b3d4de4df4",
+    "src/integrity/migrations/financial.sql": "e6cd4599db57d8dc8e1c85527859f28c6f9d392bd1dc40c60ea27283c1d0b13c",
+    "src/integrity/migrations/receiver.sql": "ff32105ff37612cf8ab235c96949ceab6cbfb037055027884f5bcbc42ad765c0",
+    "src/integrity/services.py": "9d583b3ad109523e7ed2daab6b7544ee6046e697462fa5c8eda7a36e2ab872fc",
+    "tests/conftest.py": "84d05cd22b71f5ce2ac1d4b6931765ce3e1c290b7b10498f4d63bef3c6ab3c94",
+    "tests/test_finance.py": "1802475fba915af13005cdfbfd69ba9522533dcb93dfb7949cba02418fa78ad1",
+    "tests/test_foundation.py": "e3f82460113d683c0ea049d2113946a7a6ca1665c0d7940a7108b4dee9c0d267"
+  },
+  "test_count": 34,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "test_real_financial_http_dbt_and_independent_full",
+      "class": "tests.test_finance",
+      "seconds": 21.493,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_backdated_revision_is_not_double_counted",
+      "class": "tests.test_finance",
+      "seconds": 0.0,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_arr_stock_stays_separate_from_invoice_and_cash_flows",
+      "class": "tests.test_finance",
+      "seconds": 0.0,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_equal_count_one_cent_corruption_is_not_published",
+      "class": "tests.test_finance",
+      "seconds": 0.002,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_header_line_disagreement_blocks",
+      "class": "tests.test_finance",
+      "seconds": 0.001,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_actual_failed_dbt_gate_leaves_previous_release",
+      "class": "tests.test_finance",
+      "seconds": 3.053,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_orphan_financial_record_is_not_silently_dropped",
+      "class": "tests.test_finance",
+      "seconds": 0.001,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_duplicate_source_identity_blocks",
+      "class": "tests.test_finance",
+      "seconds": 0.001,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_missing_source_and_correction_history_block",
+      "class": "tests.test_finance",
+      "seconds": 0.001,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_cross_entity_and_currency_blocks",
+      "class": "tests.test_finance",
+      "seconds": 0.001,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_payment_lineage_total_is_independently_checked",
+      "class": "tests.test_finance",
+      "seconds": 0.001,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_publication_failure_and_changed_sources_preserve_pointer",
+      "class": "tests.test_finance",
+      "seconds": 0.006,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_actual_source_domain_permissions_and_invalid_corrections",
+      "class": "tests.test_finance",
+      "seconds": 2.174,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_end_to_end_two_entities_exact_cents",
+      "class": "tests.test_foundation",
+      "seconds": 3.82,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_duplicate_source_event_and_request",
+      "class": "tests.test_foundation",
+      "seconds": 1.64,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_lost_ack_actual_committed_once_and_readback",
+      "class": "tests.test_foundation",
+      "seconds": 1.753,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_receipt_reconciliation_is_not_new_action_authorization",
+      "class": "tests.test_foundation",
+      "seconds": 1.823,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_ambiguous_mapping_blocks_without_effect",
+      "class": "tests.test_foundation",
+      "seconds": 0.591,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_cross_entity_mapping_cannot_resolve",
+      "class": "tests.test_foundation",
+      "seconds": 0.545,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_unauthorized_financial_source_overwrite_is_rejected",
+      "class": "tests.test_foundation",
+      "seconds": 0.273,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_forged_source_and_changed_owner_block_dispatch",
+      "class": "tests.test_foundation",
+      "seconds": 1.444,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_event_identity_collision_preserves_original",
+      "class": "tests.test_foundation",
+      "seconds": 0.558,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_current_account_missing_or_outside_scope_blocks",
+      "class": "tests.test_foundation",
+      "seconds": 0.621,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_interrupted_before_dispatch_durable_intent_survives",
+      "class": "tests.test_foundation",
+      "seconds": 1.876,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_bounded_failure_enters_exhaustion",
+      "class": "tests.test_foundation",
+      "seconds": 2.004,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_genuine_process_death_releases_worker_lock_and_recovers",
+      "class": "tests.test_foundation",
+      "seconds": 1.849,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_actual_simultaneous_duplicate_dispatch",
+      "class": "tests.test_foundation",
+      "seconds": 1.412,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_database_boundaries_and_append_only_receipts",
+      "class": "tests.test_foundation",
+      "seconds": 2.22,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_scope_readback_and_injector_permission",
+      "class": "tests.test_foundation",
+      "seconds": 1.329,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_independent_business_readback_rejects_tampered_content",
+      "class": "tests.test_foundation",
+      "seconds": 1.598,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_receiver_database_credentials_cannot_open_finance_database",
+      "class": "tests.test_foundation",
+      "seconds": 0.323,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_money_and_quantity_contract_no_coercion[quantity-True]",
+      "class": "tests.test_foundation",
+      "seconds": 0.366,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_money_and_quantity_contract_no_coercion[unit_monthly_cents-12.4]",
+      "class": "tests.test_foundation",
+      "seconds": 0.351,
+      "outcome": "passed"
+    },
+    {
+      "name": "test_money_and_quantity_contract_no_coercion[currency-CAD]",
+      "class": "tests.test_foundation",
+      "seconds": 4.988,
+      "outcome": "passed"
+    }
+  ],
+  "native_vendor_execution": false,
+  "cloud_resources": false,
+  "independent_final_audit": "pending_external_review"
+}
