@@ -26,7 +26,10 @@ def main():
             verified += 1
     links = 0
     fingerprints = 0
-    for verification in (ROOT / "docs/evidence").glob("**/verification.json"):
+    for verification in [
+        *(ROOT / "docs/evidence").glob("**/verification.json"),
+        *(ROOT / "docs/evidence").glob("**/browser.json"),
+    ]:
         record = json.loads(verification.read_text())
         if record.get("source_hash_encoding") != "UTF-8 with LF line endings":
             raise ValueError("unsupported_source_fingerprint_encoding")

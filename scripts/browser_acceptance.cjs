@@ -11,6 +11,9 @@ if(fs.existsSync(output))throw Error("fresh_browser_evidence_path_required");
 fs.mkdirSync(output,{recursive:true});
 const credentials=JSON.parse(fs.readFileSync(path.join(workspace,"operator-credentials.json")));
 const cases=[],accessibility=[],errors=[];
+const crypto=require("node:crypto");
+function fingerprints(){const result={};for(const name of ["web/index.html","web/app.css","web/app.js","scripts/browser_acceptance.cjs","scripts/verify_browser.py","package.json","pnpm-lock.yaml"]){result[name]=crypto.createHash("sha256").update(fs.readFileSync(name,"utf8").replaceAll("\r\n","\n")).digest("hex");}return result;}
+const startedFingerprints=fingerprints();
 const started=execFileSync("git",["rev-parse","HEAD"],{encoding:"utf8"}).trim();
 const check=(name,value)=>{assert.ok(value,name);cases.push(name);};
 async function audit(page,name){
@@ -84,11 +87,11 @@ async function until(fn,timeout=150000){const deadline=Date.now()+timeout;while(
    await eu.page.getByRole("button",{name:label,exact:true}).click();await eu.page.locator("#view .panel").first().waitFor();await audit(eu.page,"mobile "+view);
    if(view==="overview")await eu.page.screenshot({path:path.join(output,"console-mobile.png"),fullPage:true});
   }
-  await eu.page.getByRole("button",{name:"Sign out",exact:true}).click();check("logout revokes session",(await eu.page.request.get(origin+"/api/me")).status()===401);
+  await eu.page.getByRole("button",{name:"Sign out",exact:true}).click();await eu.page.locator("#login-screen").waitFor({state:"visible"});check("logout revokes session",(await eu.page.request.get(origin+"/api/me")).status()===401);
   check("no browser script errors",errors.length===0);
   assert.equal(execFileSync("git",["rev-parse","HEAD"],{encoding:"utf8"}).trim(),started,"source commit unchanged");
-  const crypto=require("node:crypto");const hashes={};for(const name of fs.readdirSync(output))hashes[name]=crypto.createHash("sha256").update(fs.readFileSync(path.join(output,name))).digest("hex");
-  fs.writeFileSync(path.join(output,"browser.json"),JSON.stringify({executed_at:new Date().toISOString(),source_commit:started,browser:browser.version(),lane:"actual_local_postgresql_http_console",cases,accessibility,errors,initial:{billing_cents:"3900000",erp_cents:"3750000"},final:{billing_cents:String(total(final,"billing_net_cents")),erp_cents:String(total(final,"erp_net_cents"))},screenshots:hashes,native_vendor_execution:false},null,2)+"\n");
+  assert.deepEqual(fingerprints(),startedFingerprints,"browser source unchanged");const hashes={};for(const name of fs.readdirSync(output))hashes[name]=crypto.createHash("sha256").update(fs.readFileSync(path.join(output,name))).digest("hex");
+  fs.writeFileSync(path.join(output,"browser.json"),JSON.stringify({executed_at:new Date().toISOString(),source_commit:started,source_hash_encoding:"UTF-8 with LF line endings",source_hashes:startedFingerprints,browser:browser.version(),lane:"actual_local_postgresql_http_console",cases,accessibility,errors,initial:{billing_cents:"3900000",erp_cents:"3750000"},final:{billing_cents:String(total(final,"billing_net_cents")),erp_cents:String(total(final,"erp_net_cents"))},screenshots:hashes,native_vendor_execution:false},null,2)+"\n");
   console.log(JSON.stringify({checks:cases.length,accessibility_views:accessibility.length,script_errors:errors.length}));
  }finally{await browser.close();}
 })().catch(e=>{console.error(e.message);process.exitCode=1;});
