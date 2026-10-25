@@ -47,7 +47,14 @@ def adjustment(invoice_id, kind, event, logical, amount, revision=1, corrects=No
 
 
 def compare_models(left, right):
-    for model in ("fct_invoices", "fct_adjustments", "mart_reconciliation", "mart_period"):
+    for model in (
+        "fct_invoices",
+        "fct_adjustments",
+        "mart_reconciliation",
+        "mart_period",
+        "fct_contract_period",
+        "fct_subscription_period",
+    ):
         with (
             duckdb.connect(str(left), read_only=True) as a,
             duckdb.connect(str(right), read_only=True) as b,
@@ -118,7 +125,7 @@ def execute_finance(stack, workspace):
         "corrected_dbt": corrected_dbt,
         "independent_dbt": independent_dbt,
         "all_four_models_exact_vs_independent_full": True,
-        "materialization": "full table; no incremental performance claim",
+        "materialization": "six models; reconciliation uses incremental key replacement with full affected-row recomputation; no speedup claim",
         "native_vendor_execution": False,
         "independent_final_audit": "pending",
     }

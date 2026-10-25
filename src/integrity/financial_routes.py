@@ -13,7 +13,7 @@ def mount(app, kind, dsn, authorized, injection):
         tables = (
             ("accounts", "contracts", "events", "opportunities")
             if kind == "salesforce"
-            else ("records", "source_events")
+            else ("records", "source_events", "source_deliveries")
         )
         with connect(dsn) as c:
             # connect() has SET statement_timeout but no source read before this isolation setting.
@@ -57,6 +57,20 @@ def mount(app, kind, dsn, authorized, injection):
             if previous:
                 if previous["body"] != document:
                     raise HTTPException(409, "source_event_identity_content_conflict")
+                c.execute(
+                    "INSERT INTO source_deliveries(tenant,entity,body) VALUES(%s,%s,%s)",
+                    (
+                        body.tenant,
+                        body.entity,
+                        Jsonb(
+                            {
+                                "event_id": body.event_id,
+                                "duplicate": True,
+                                "payload_hash": digest(document),
+                            }
+                        ),
+                    ),
+                )
                 return {"event_id": body.event_id, "duplicate": True, "hash": digest(document)}
             head = c.execute(
                 "SELECT body FROM source_events WHERE tenant=%s AND entity=%s AND logical_id=%s "
@@ -109,6 +123,20 @@ def mount(app, kind, dsn, authorized, injection):
                     body.logical_id,
                     body.revision,
                     Jsonb(document),
+                ),
+            )
+            c.execute(
+                "INSERT INTO source_deliveries(tenant,entity,body) VALUES(%s,%s,%s)",
+                (
+                    body.tenant,
+                    body.entity,
+                    Jsonb(
+                        {
+                            "event_id": body.event_id,
+                            "duplicate": False,
+                            "payload_hash": digest(document),
+                        }
+                    ),
                 ),
             )
         return {"event_id": body.event_id, "duplicate": False, "hash": digest(document)}

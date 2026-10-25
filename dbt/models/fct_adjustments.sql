@@ -8,7 +8,7 @@ with known as (
  row_number() over(partition by body->>'source',body->>'tenant',body->>'entity',body->>'logical_id'
  order by cast(body->>'revision' as integer) desc) as rnk
  from {{ source('raw','adjustments') }}
- where cast(body->>'observed_source_at' as timestamptz)<=timestamptz '2026-03-31 23:59:59+00'
+ where cast(body->>'observed_source_at' as timestamptz)<=(select known_at from raw.reporting_period)
 )
-select * exclude(rnk) from known where rnk=1
-and effective_date>=date '2026-01-01' and effective_date<date '2026-04-01'
+select source,tenant,entity,event_id,logical_id,invoice_id,kind,revision,amount_cents,effective_date from known where rnk=1
+and effective_date>=(select start_date from raw.reporting_period) and effective_date<(select end_exclusive from raw.reporting_period)

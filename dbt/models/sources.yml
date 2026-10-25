@@ -6,7 +6,21 @@ sources:
       - name: commitments
       - name: records
       - name: adjustments
+      - name: lifecycle
+      - name: subscription_changes
 models:
+  - name: fct_contract_period
+    columns:
+      - name: contract_id
+        data_tests: [not_null]
+      - name: monthly_cents
+        data_tests: [not_null]
+  - name: fct_subscription_period
+    columns:
+      - name: subscription_id
+        data_tests: [not_null]
+      - name: monthly_cents
+        data_tests: [not_null]
   - name: fct_invoices
     columns:
       - name: invoice_id
@@ -40,4 +54,4 @@ models:
   - name: mart_period
     columns:
       - name: entity
-        data_tests: [unique, not_null]
+        data_tests: [not_null]

@@ -71,7 +71,12 @@ class Effect(Closed):
     destination_customer: str
     source_event: str
     source_revision: int = Field(ge=1)
-    operation: Literal["activate_and_invoice", "post_invoice_and_cash"]
+    operation: Literal[
+        "activate_and_invoice",
+        "post_invoice_and_cash",
+        "apply_contract_change",
+        "post_contract_change",
+    ]
     currency: Literal["USD"] = "USD"
     facts: dict
 
@@ -108,4 +113,47 @@ class Adjustment(Closed):
             raise ValueError("aware_observed_timestamp_required")
         if (self.revision == 1) != (self.corrects_event is None):
             raise ValueError("explicit_revision_chain_required")
+        return self
+
+
+class ContractChange(Closed):
+    schema_version: Literal["contract-change.v1"] = "contract-change.v1"
+    source: Literal["salesforce"] = "salesforce"
+    tenant: str = Field(min_length=1, max_length=80)
+    entity: str = Field(min_length=1, max_length=80)
+    event_id: str = Field(min_length=1, max_length=100)
+    opportunity_id: str
+    account_id: str
+    contract_id: str
+    owner_id: str
+    revision: int = Field(ge=2)
+    parent_event_id: str
+    change_id: str
+    action: Literal["expansion", "contraction", "cancellation", "renewal", "correction"]
+    correction_of: str | None = None
+    currency: Literal["USD"] = "USD"
+    unit_monthly_cents: int = Field(ge=0, le=10**10)
+    quantity: int = Field(ge=0, le=10000)
+    effective_start: str
+    effective_end: str
+    event_at: str
+    observed_source_at: str
+
+    @model_validator(mode="after")
+    def valid_change(self):
+        start, end = (
+            date.fromisoformat(self.effective_start),
+            date.fromisoformat(self.effective_end),
+        )
+        if start.day != 1 or end.day != 1 or end <= start:
+            raise ValueError("whole_month_effective_interval_required")
+        if (self.action == "cancellation") != (self.quantity == 0 and self.unit_monthly_cents == 0):
+            raise ValueError("only_cancellation_can_zero_subscription")
+        if self.action != "cancellation" and (self.quantity == 0 or self.unit_monthly_cents == 0):
+            raise ValueError("positive_subscription_required")
+        if (self.action == "correction") != (self.correction_of is not None):
+            raise ValueError("explicit_correction_required")
+        for stamp in (self.event_at, self.observed_source_at):
+            if datetime.fromisoformat(stamp).utcoffset() is None:
+                raise ValueError("aware_timestamp_required")
         return self

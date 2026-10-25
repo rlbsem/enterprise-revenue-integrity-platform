@@ -40,6 +40,9 @@ def create_app(kind=None, dsn=None, token=None, injector=None):
     mount(app, kind, dsn, authorized, injection)
 
     if kind == "salesforce":
+        from .lifecycle import mount_source
+
+        mount_source(app, dsn, injection)
 
         @app.get("/accounts/{record_id}", dependencies=[Depends(authorized)])
         def account(record_id: str, tenant: str, entity: str):
@@ -209,6 +212,10 @@ def base_record(effect, kind, suffix, **fields):
 
 
 def billing_records(c, effect):
+    if effect.operation == "apply_contract_change":
+        from .lifecycle import receive_billing
+
+        return receive_billing(c, effect)
     if effect.operation != "activate_and_invoice":
         raise ValueError("operation_authority")
     commercial = Commercial.model_validate(effect.facts)
@@ -298,6 +305,10 @@ def billing_records(c, effect):
 
 
 def finance_records(effect):
+    if effect.operation == "post_contract_change":
+        from .lifecycle import receive_finance
+
+        return receive_finance(effect)
     if effect.operation != "post_invoice_and_cash" or set(effect.facts) != {"billing_receipt"}:
         raise ValueError("operation_authority")
     receipt = effect.facts["billing_receipt"]

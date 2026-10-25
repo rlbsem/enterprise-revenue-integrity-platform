@@ -33,6 +33,10 @@ class Controller:
         )
 
     def source(self, event):
+        if event.get("schema_version") == "contract-change.v1":
+            from .lifecycle import verify_source
+
+            return verify_source(self, event)
         scope = {"tenant": event["tenant"], "entity": event["entity"]}
         with self.client("salesforce") as client:
             event_response = client.get("/events/" + event["event_id"], params=scope)
@@ -101,6 +105,7 @@ class Controller:
         )
 
     def intent(self, c, event, canonical_account, customer, destination, facts):
+        changed = event.get("schema_version") == "contract-change.v1"
         effect = Effect(
             effect_id=key(
                 event["tenant"],
@@ -116,9 +121,11 @@ class Controller:
             source_event=event["event_id"],
             source_revision=event["revision"],
             facts=facts,
-            operation="activate_and_invoice"
-            if destination == "stripe"
-            else "post_invoice_and_cash",
+            operation=(
+                "apply_contract_change" if destination == "stripe" else "post_contract_change"
+            )
+            if changed
+            else ("activate_and_invoice" if destination == "stripe" else "post_invoice_and_cash"),
         )
         body = effect.model_dump(mode="json")
         old = c.execute(
@@ -149,6 +156,10 @@ class Controller:
         return effect.effect_id
 
     def ingest(self, document):
+        if document.get("schema_version") == "contract-change.v1":
+            from .lifecycle import ingest
+
+            return ingest(self, document)
         event = Commercial.model_validate(document).model_dump(mode="json")
         with connect(self.dsn) as c:
             lock(c, event["tenant"], event["opportunity_id"])

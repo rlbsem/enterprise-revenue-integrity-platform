@@ -13,6 +13,7 @@ import yaml
 from .contracts import Adjustment, digest
 from .control import Refused
 from .db import connect
+from . import temporal
 
 ROOT = Path(__file__).resolve().parents[2]
 PERIOD = {
@@ -22,7 +23,7 @@ PERIOD = {
 }
 
 
-def extract(controller, scopes):
+def extract(controller, scopes, period=None):
     snapshots = []
     for tenant, entity in scopes:
         for source in ("salesforce", "stripe", "netsuite"):
@@ -41,15 +42,16 @@ def extract(controller, scopes):
     return {
         "schema_version": "financial-snapshot.v1",
         "scopes": [list(s) for s in scopes],
-        "period": PERIOD,
+        "period": dict(period or PERIOD),
         "snapshots": snapshots,
         "mappings": mappings,
     }
 
 
 def checked(snapshot):
-    if snapshot["schema_version"] != "financial-snapshot.v1" or snapshot["period"] != PERIOD:
+    if snapshot["schema_version"] != "financial-snapshot.v1":
         raise Refused("unsupported_financial_contract")
+    temporal.months(snapshot["period"])
     expected = {
         (t, e, s) for t, e in snapshot["scopes"] for s in ("salesforce", "stripe", "netsuite")
     }
@@ -64,6 +66,8 @@ def checked(snapshot):
             raise Refused("incomplete_or_changed_snapshot")
         source, tenant, entity = export["service"], export["tenant"], export["entity"]
         if source == "salesforce":
+            if not export["contents"]["contracts"]:
+                raise Refused("empty_commercial_scope_requires_baseline")
             for row in export["contents"]["contracts"]:
                 if (row["tenant"], row["entity"], row["currency"]) != (tenant, entity, "USD"):
                     raise Refused("commercial_scope_or_currency_mismatch")
@@ -102,7 +106,10 @@ def checked(snapshot):
             raise Refused("duplicate_source_identity")
     for row in records:
         for name in ("amount_cents", "monthly_cents", "unit_monthly_cents", "quantity"):
-            if name in row and (type(row[name]) is not int or row[name] < 0):
+            if name in row and (
+                type(row[name]) is not int
+                or (row[name] < 0 and row["kind"] not in ("amendment_line", "change_posting"))
+            ):
                 raise Refused("invalid_exact_money_or_quantity")
     by_key = {(r["source"], r["kind"], r["id"]): r for r in records}
     for row in records:
@@ -114,9 +121,11 @@ def checked(snapshot):
                 "invoice_line",
                 "payment",
                 "payment_allocation",
+                "subscription_change",
+                "amendment_line",
             }
             if row["source"] == "stripe"
-            else {"posting", "payment_application"}
+            else {"posting", "payment_application", "change_posting", "change_confirmation"}
         )
         if row["kind"] not in allowed:
             raise Refused("unsupported_source_record_kind")
@@ -146,19 +155,46 @@ def checked(snapshot):
         ):
             raise Refused("source_correction_coverage_gap")
         heads[identity] = event
+    commercial = {}
+    for export in snapshot["snapshots"]:
+        if export["service"] == "salesforce":
+            for event in export["contents"]["events"]:
+                identity = (export["tenant"], export["entity"], event["event_id"])
+                if identity in commercial:
+                    raise Refused("duplicate_commercial_event")
+                commercial[identity] = event
+    for event in temporal.changes(snapshot):
+        parent = commercial.get((event["tenant"], event["entity"], event["parent_event_id"]))
+        if (
+            not parent
+            or parent["revision"] + 1 != event["revision"]
+            or any(
+                parent[k] != event[k]
+                for k in ("contract_id", "account_id", "opportunity_id", "owner_id")
+            )
+        ):
+            raise Refused("commercial_history_coverage_gap")
+    for record in records:
+        if (
+            record["kind"] == "subscription_change"
+            and commercial.get((record["tenant"], record["entity"], record["change"]["event_id"]))
+            != record["change"]
+        ):
+            raise Refused("billing_change_source_provenance_mismatch")
     return commitments, records, events
 
 
 def oracle(snapshot):
     """Derives values from raw service records; never reads dbt tables or shared SQL formulas."""
     commitments, records, events = checked(snapshot)
+    period = snapshot["period"]
     by_id = {(r["source"], r["kind"], r["id"]): r for r in records}
     contracts = {(r["tenant"], r["entity"], r["contract_id"]): r for r in commitments}
     # Full correction chains were checked above; select latest known revision independently.
     heads = {}
     for event in events:
         if datetime.fromisoformat(event["observed_source_at"]) <= datetime.fromisoformat(
-            PERIOD["known_at"]
+            period["known_at"]
         ):
             identity = (event["source"], event["tenant"], event["entity"], event["logical_id"])
             if identity not in heads or heads[identity]["revision"] < event["revision"]:
@@ -176,7 +212,7 @@ def oracle(snapshot):
             raise Refused("payment_allocation_lineage_or_total_mismatch")
     result = []
     for invoice in [r for r in records if r["source"] == "stripe" and r["kind"] == "invoice"]:
-        if not PERIOD["start"] <= invoice["invoice_date"] < PERIOD["end_exclusive"]:
+        if not period["start"] <= invoice["invoice_date"] < period["end_exclusive"]:
             continue
         scope = (invoice["tenant"], invoice["entity"])
         subscription = by_id[("stripe", "subscription", invoice["subscription_id"])]
@@ -213,7 +249,7 @@ def oracle(snapshot):
             e
             for e in heads.values()
             if e["invoice_id"] == invoice["id"]
-            and PERIOD["start"] <= e["effective_date"] < PERIOD["end_exclusive"]
+            and period["start"] <= e["effective_date"] < period["end_exclusive"]
         ]
         if any((e["tenant"], e["entity"]) != scope for e in adjustments):
             raise Refused("cross_scope_adjustment")
@@ -237,24 +273,33 @@ def oracle(snapshot):
             for r in related
             if r["source"] == "stripe"
             and r["kind"] == "payment_allocation"
-            and PERIOD["start"] <= r["payment_date"] < PERIOD["end_exclusive"]
+            and period["start"] <= r["payment_date"] < period["end_exclusive"]
         )
         applications = sum(
             r["amount_cents"]
             for r in related
             if r["source"] == "netsuite"
             and r["kind"] == "payment_application"
-            and PERIOD["start"] <= r["posting_date"] < PERIOD["end_exclusive"]
+            and period["start"] <= r["posting_date"] < period["end_exclusive"]
         )
         posting = sum(
             r["amount_cents"]
             for r in related
             if r["source"] == "netsuite"
-            and r["kind"] == "posting"
-            and PERIOD["start"] <= r["posting_date"] < PERIOD["end_exclusive"]
+            and r["kind"] in ("posting", "change_posting")
+            and period["start"] <= r["posting_date"] < period["end_exclusive"]
+            and datetime.fromisoformat(r.get("observed_source_at", "2025-01-01T00:00:00+00:00"))
+            <= datetime.fromisoformat(period["known_at"])
         )
-        expected = contract["unit_monthly_cents"] * contract["quantity"] * 3 + proration - credit
-        net = invoice["amount_cents"] + proration - credit
+        amendments = sum(
+            r["amount_cents"]
+            for r in related
+            if r["kind"] == "amendment_line"
+            and datetime.fromisoformat(r["observed_source_at"])
+            <= datetime.fromisoformat(period["known_at"])
+        )
+        expected = temporal.charge(snapshot, contract, invoice["invoice_date"]) + proration - credit
+        net = invoice["amount_cents"] + amendments + proration - credit
         if credit > invoice["amount_cents"] + proration or cash > net:
             raise Refused("credit_or_cash_exceeds_net_invoice")
         for allocation in [
@@ -288,6 +333,7 @@ def oracle(snapshot):
 
 
 def load(database, snapshot):
+    Path(database).parent.mkdir(parents=True, exist_ok=True)
     commitments, records, events = checked(snapshot)
     with duckdb.connect(str(database)) as c:
         c.execute("CREATE SCHEMA IF NOT EXISTS raw")
@@ -295,15 +341,34 @@ def load(database, snapshot):
             ("commitments", commitments),
             ("records", records),
             ("adjustments", events),
+            ("lifecycle", temporal.changes(snapshot)),
+            (
+                "subscription_changes",
+                [
+                    {**r["change"], "subscription_id": r["subscription_id"]}
+                    for r in records
+                    if r["kind"] == "subscription_change"
+                ],
+            ),
         ):
             c.execute(f"CREATE OR REPLACE TABLE raw.{name}(body JSON)")
             if rows:
                 c.executemany(
                     f"INSERT INTO raw.{name} VALUES (?)", [(json.dumps(r),) for r in rows]
                 )
+        c.execute(
+            "CREATE OR REPLACE TABLE raw.reporting_period(start_date DATE,end_exclusive DATE,known_at TIMESTAMPTZ)"
+        )
+        p = snapshot["period"]
+        c.execute(
+            "INSERT INTO raw.reporting_period VALUES(?,?,?)",
+            [p["start"], p["end_exclusive"], p["known_at"]],
+        )
+        c.execute("CREATE OR REPLACE TABLE raw.months(date_day DATE,valid_to DATE)")
+        c.executemany("INSERT INTO raw.months VALUES(?,?)", temporal.months(p))
 
 
-def build(database, workspace):
+def build(database, workspace, full_refresh=False):
     workspace = Path(workspace).resolve()
     workspace.mkdir(parents=True, exist_ok=True)
     profiles = {
@@ -316,6 +381,23 @@ def build(database, workspace):
     }
     (workspace / "profiles.yml").write_text(yaml.safe_dump(profiles))
     environment = {**os.environ, "DBT_SEND_ANONYMOUS_USAGE_STATS": "false", "DO_NOT_TRACK": "true"}
+    # A scope/period removal cannot leave old incremental keys behind.
+    with duckdb.connect(str(database)) as c:
+        exists = c.execute(
+            "SELECT count(*) FROM information_schema.tables WHERE table_name='mart_reconciliation'"
+        ).fetchone()[0]
+        if exists:
+            current = {
+                r[0] for r in c.execute("SELECT invoice_id FROM mart_reconciliation").fetchall()
+            }
+            incoming = {
+                r[0]
+                for r in c.execute(
+                    "SELECT body->>'id' FROM raw.records WHERE body->>'source'='stripe' AND body->>'kind'='invoice' AND cast(body->>'invoice_date' as date)>=(select start_date from raw.reporting_period) AND cast(body->>'invoice_date' as date)<(select end_exclusive from raw.reporting_period)"
+                ).fetchall()
+            }
+            if not current.issubset(incoming):
+                full_refresh = True
     with (workspace / "dbt.log").open("w") as log:
         result = subprocess.run(
             [
@@ -332,6 +414,7 @@ def build(database, workspace):
                 "--log-path",
                 str(workspace / "logs"),
                 "--no-use-colors",
+                *(["--full-refresh"] if full_refresh else []),
             ],
             env=environment,
             stdout=log,
@@ -345,7 +428,7 @@ def build(database, workspace):
     tests = [r for r in results["results"] if r["unique_id"].startswith("test.")]
     expected_tests = {k for k, v in manifest["nodes"].items() if v["resource_type"] == "test"}
     if (
-        len(models) != 4
+        len(models) != 6
         or len(tests) < 15
         or {r["unique_id"] for r in tests} != expected_tests
         or any(r["status"] not in ("success", "pass") for r in results["results"])
@@ -362,6 +445,12 @@ def build(database, workspace):
     return rows, {
         "models": len(models),
         "tests": len(tests),
+        "full_refresh": full_refresh,
+        "incremental_models": [
+            k
+            for k, v in manifest["nodes"].items()
+            if v["resource_type"] == "model" and v["config"]["materialized"] == "incremental"
+        ],
         "period_rows": period_rows,
         "results": [{"id": r["unique_id"], "status": r["status"]} for r in results["results"]],
     }
@@ -375,7 +464,7 @@ def publish(root, snapshot, rows, fresh_snapshot, fail_before_pointer=False):
         raise Refused("source_changed_during_reconciliation")
     result = {
         "contract": "reconciled-release.v1",
-        "period": PERIOD,
+        "period": snapshot["period"],
         "source_hash": digest(snapshot),
         "rows": rows,
         "comparison_scope": "issued Q1 invoices; missing commitments reported separately",
@@ -448,9 +537,6 @@ def coverage(snapshot):
 
 def oracle_period(snapshot):
     _, records, _ = checked(snapshot)
-    subscriptions = {
-        r["id"]: r for r in records if r["source"] == "stripe" and r["kind"] == "subscription"
-    }
     result = {}
     for row in oracle(snapshot):
         scope = (row["tenant"], row["entity"])
@@ -474,19 +560,9 @@ def oracle_period(snapshot):
             "allocated_cash_cents",
         ):
             target[metric] += row[metric]
-    for item in [
-        r for r in records if r["source"] == "stripe" and r["kind"] == "subscription_item"
-    ]:
-        subscription = subscriptions[item["subscription_id"]]
-        scope = (item["tenant"], item["entity"])
-        if (
-            subscription["effective_start"] <= "2026-03-31" < subscription["effective_end"]
-            and subscription["status"] == "active"
-            and scope in result
-        ):
-            result[scope]["period_end_arr_cents"] += (
-                item["unit_monthly_cents"] * item["quantity"] * 12
-            )
+    for scope, amount in temporal.billing_arr(snapshot, records).items():
+        if scope in result:
+            result[scope]["period_end_arr_cents"] = amount
     return [result[s] for s in sorted(result)]
 
 
@@ -565,9 +641,14 @@ def bridge(snapshot, rows):
         for e in events
         if e["revision"] > 1
     ]
-    return {
-        "scope": "Q1 issued invoices; ARR shown separately",
-        "entries": entries,
-        "backdated_correction_lineage": corrections,
-        "unbilled_commitments": coverage(snapshot),
-    }
+    from .variance import complete_bridge
+
+    return complete_bridge(
+        snapshot,
+        {
+            "scope": "Q1 issued invoices; ARR shown separately",
+            "entries": entries,
+            "backdated_correction_lineage": corrections,
+            "unbilled_commitments": coverage(snapshot),
+        },
+    )

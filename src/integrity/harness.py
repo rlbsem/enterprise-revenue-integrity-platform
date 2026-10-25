@@ -140,6 +140,11 @@ class LocalStack:
                 )
                 if name in ("stripe", "netsuite"):
                     migrate(admin, "financial")
+                    migrate(admin, "deliveries")
+                if name == "salesforce":
+                    migrate(admin, "crm_changes")
+                if name == "control":
+                    migrate(admin, "ledger")
                 with connect(admin) as db:
                     db.execute("REVOKE CREATE ON SCHEMA public FROM PUBLIC")
                     db.execute(
@@ -153,6 +158,10 @@ class LocalStack:
                     ]
                     for table in tables:
                         permissions = "SELECT"
+                        if name == "salesforce" and table == "events":
+                            permissions = "SELECT,INSERT"
+                        if name == "salesforce" and table == "opportunities":
+                            permissions = "SELECT,UPDATE"
                         if name == "control" and table not in (
                             "schema_version",
                             "accounts",

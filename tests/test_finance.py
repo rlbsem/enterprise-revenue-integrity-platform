@@ -29,8 +29,8 @@ def mutate_export(snapshot, source, change):
 def test_real_financial_http_dbt_and_independent_full(financial_run):
     assert financial_run["all_four_models_exact_vs_independent_full"] is True
     for name in ("baseline_dbt", "corrected_dbt", "independent_dbt"):
-        assert financial_run[name]["models"] == 4
-        assert financial_run[name]["tests"] == 18
+        assert financial_run[name]["models"] == 6
+        assert financial_run[name]["tests"] == 23
         assert all(r["status"] in ("pass", "success") for r in financial_run[name]["results"])
     rows = financial_run["final_release"]["rows"]
     assert sum(r["expected_invoice_cents"] for r in rows) == 4150000
