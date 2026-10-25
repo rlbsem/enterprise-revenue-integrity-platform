@@ -83,3 +83,29 @@ class Fault(Closed):
 
 class Ingest(Closed):
     event: Commercial
+
+
+class Adjustment(Closed):
+    schema_version: Literal["financial-adjustment.v1"] = "financial-adjustment.v1"
+    event_id: str = Field(min_length=1, max_length=100)
+    logical_id: str = Field(min_length=1, max_length=100)
+    tenant: str
+    entity: str
+    kind: Literal["credit", "proration", "credit_posting", "proration_posting"]
+    invoice_id: str
+    amount_cents: int = Field(gt=0, le=10**11)
+    currency: Literal["USD"] = "USD"
+    revision: int = Field(ge=1)
+    corrects_event: str | None = None
+    effective_date: str
+    observed_source_at: str
+    reason: str = Field(min_length=1, max_length=200)
+
+    @model_validator(mode="after")
+    def temporal(self):
+        date.fromisoformat(self.effective_date)
+        if datetime.fromisoformat(self.observed_source_at).utcoffset() is None:
+            raise ValueError("aware_observed_timestamp_required")
+        if (self.revision == 1) != (self.corrects_event is None):
+            raise ValueError("explicit_revision_chain_required")
+        return self

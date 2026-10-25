@@ -138,6 +138,8 @@ class LocalStack:
                     if name == "salesforce"
                     else "receiver",
                 )
+                if name in ("stripe", "netsuite"):
+                    migrate(admin, "financial")
                 with connect(admin) as db:
                     db.execute("REVOKE CREATE ON SCHEMA public FROM PUBLIC")
                     db.execute(

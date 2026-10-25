@@ -11,6 +11,7 @@ from psycopg.types.json import Jsonb
 
 from .contracts import Commercial, Effect, Fault, digest, key
 from .db import connect, lock
+from .financial_routes import mount
 
 
 def create_app(kind=None, dsn=None, token=None, injector=None):
@@ -31,8 +32,12 @@ def create_app(kind=None, dsn=None, token=None, injector=None):
     @app.get("/health")
     def health():
         with connect(dsn) as c:
-            version = c.execute("SELECT version FROM schema_version").fetchone()["version"]
+            version = c.execute("SELECT max(version) AS version FROM schema_version").fetchone()[
+                "version"
+            ]
         return {"status": "ready", "service": kind, "schema_version": version, "native": False}
+
+    mount(app, kind, dsn, authorized, injection)
 
     if kind == "salesforce":
 

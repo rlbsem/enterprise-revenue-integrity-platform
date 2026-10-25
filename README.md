@@ -20,6 +20,8 @@ The demo also commits a billing effect, deliberately delays the response beyond 
 
 [Executed evidence](docs/evidence/pass1/README.md) · [Architecture and authority](docs/architecture.md) · [Recovery and limits](docs/recovery.md) · [Reproduction](docs/reproduction.md) · [Verified progress](docs/progress.md)
 
+**Financial reconciliation:** the [implemented analytical slice](docs/financial-contract.md) compares a scheduled invoice basis, billing net invoice and ERP invoice postings. Real local source-event corrections and four dbt models retain a $1,500 unposted adjustment as **review required**. ARR and cash remain separate measures. This is an additional local acceptance lane; the complete financial roadmap and independent audit remain unfinished.
+
 ```mermaid
 flowchart LR
   CRM[Local Salesforce-contract HTTP service] --> IN[Immutable inbox + source verification]

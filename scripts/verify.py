@@ -22,8 +22,10 @@ def run(command, output):
 
 def source_hashes():
     files = [ROOT / "pyproject.toml", ROOT / "requirements.lock"]
-    for directory in ("src", "tests", "scripts"):
-        files.extend(p for p in (ROOT / directory).rglob("*") if p.suffix in (".py", ".sql"))
+    for directory in ("src", "tests", "scripts", "dbt"):
+        files.extend(
+            p for p in (ROOT / directory).rglob("*") if p.suffix in (".py", ".sql", ".yml")
+        )
     return {
         p.relative_to(ROOT).as_posix(): hashlib.sha256(
             p.read_text(encoding="utf-8").encode()
@@ -88,6 +90,18 @@ def main():
             str(output / "demo.json"),
         ],
         workspace / "demo.log",
+    )
+    run(
+        [
+            sys.executable,
+            "-m",
+            "integrity.finance_demo",
+            "--workspace",
+            str(workspace / "finance-demo"),
+            "--output",
+            str(output / "finance.json"),
+        ],
+        workspace / "finance.log",
     )
     record = {
         "executed_at": datetime.now(UTC).isoformat(),

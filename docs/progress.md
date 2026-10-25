@@ -4,8 +4,8 @@ This ledger records implementation state against Master Roadmap V1.0. It is not 
 
 | Pass | Scope | State |
 |---|---|---|
-| 1 | Cross-system PostgreSQL/HTTP foundation, identity, durable execution and recovery | Local gate passed: 20 tests and executed demo; source `cd4954c25da8313d228747ba6f8645eaf4bfc6f1`; GitHub CI pending |
-| 2 | Financial contracts, dbt, 3-Number Truth Test, Variance Bridge, independent oracle | Pending |
+| 1 | Cross-system PostgreSQL/HTTP foundation, identity, durable execution and recovery | Passed: 20 local tests/demo and GitHub CI; evidence checkpoint `adcc4e183c9bde32b2e0c5f5bfec8b718e04ccc0` |
+| 2 | Financial contracts, dbt, 3-Number Truth Test, Variance Bridge, independent oracle | Implemented financial slice under final verification; broader lifecycle/bridge scope remains open |
 | 3 | Adversarial security/recovery hardening | Pending; author's review is not the independent Astra audit |
 | 4 | Authenticated API-backed operator console and browser acceptance | Pending |
 | 5 | Final package verification and independent architecture/security acceptance | Independent audit pending |
@@ -22,3 +22,11 @@ Existing portfolio repositories and the profile are read-only. No cloud resource
 - Financial proof: source-derived $42,000 invoices = $42,000 ERP invoice postings; $16,500 allocated cash separately reconciled. These are synthetic USD and do not represent recognized revenue.
 - Remaining: amendments/credits, analytical reconciliation/dbt, coverage repair, scoped operator approvals/UI, broader recovery hardening, and the independent final audit. Production authorization atomicity, scalability and HA are not established.
 - Next: Pass 2 financial contracts, independent source-grain oracle and executable local dbt models. Existing operation defaults unchanged.
+
+Foundation checkpoint CI passed: [push run](https://github.com/rlbsem/enterprise-revenue-integrity-platform/actions/runs/40158476004) and [PR run](https://github.com/rlbsem/enterprise-revenue-integrity-platform/actions/runs/40158479846), both at `adcc4e183c9bde32b2e0c5f5bfec8b718e04ccc0`.
+
+## Pass 2 financial slice
+
+Actual local development execution has passed four models and 18 dbt tests per build, plus a preliminary 30-test regression. Final qualification is recorded separately after the remaining negative cases. The [financial contract](financial-contract.md) gives the exact scope, calculations, full-build comparison and limitations.
+
+Open before advancing the complete Pass 2 gate: contract-backed subscription expansion/contraction/cancellation, business-time/SCD corrections, the remaining governed variance categories, and a tested warehouse portability contract. Passes 3–5 have not been marked complete. The author has not performed the separate independent Astra audit.

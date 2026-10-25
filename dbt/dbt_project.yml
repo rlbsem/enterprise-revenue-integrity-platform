@@ -1,0 +1,9 @@
+name: revenue_integrity
+version: '0.2.0'
+config-version: 2
+profile: integrity
+model-paths: [models]
+test-paths: [tests]
+models:
+  revenue_integrity:
+    +materialized: table
