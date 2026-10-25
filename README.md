@@ -20,7 +20,7 @@ The demo also commits a billing effect, deliberately delays the response beyond 
 
 [Executed evidence](docs/evidence/pass1/README.md) · [Architecture and authority](docs/architecture.md) · [Recovery and limits](docs/recovery.md) · [Reproduction](docs/reproduction.md) · [Verified progress](docs/progress.md)
 
-**Financial reconciliation:** the [implemented analytical slice](docs/financial-contract.md) compares a scheduled invoice basis, billing net invoice and ERP invoice postings. Real local source-event corrections and four dbt models retain a $1,500 unposted adjustment as **review required**. ARR and cash remain separate measures. This is an additional local acceptance lane; the complete financial roadmap and independent audit remain unfinished.
+**Financial reconciliation:** the [implemented analytical slice](docs/financial-contract.md) compares a scheduled invoice basis, billing net invoice and ERP invoice postings. Contract-backed lifecycle changes, source corrections and six dbt models retain a $1,500 unposted adjustment as **review required**. The current lifecycle quarter shows $39,000 billing, $37,500 ERP invoice postings, $16,500 allocated cash and $120,000 ARR separately. [Executed lifecycle, incremental and portability proof](docs/evidence/pass2-complete/README.md). Operator security/console work and the independent audit are tracked separately.
 
 ```mermaid
 flowchart LR

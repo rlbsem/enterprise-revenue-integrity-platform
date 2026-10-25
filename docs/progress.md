@@ -29,7 +29,7 @@ Foundation checkpoint CI passed: [push run](https://github.com/rlbsem/enterprise
 
 The final [qualified slice](evidence/pass2/README.md) passed 34 Python tests and three actual dbt builds, each with four models and 18 data tests, at source `85bf1f6af4512a4d5d30dc0287ff1bf74851d0ea`. Every corrected model matched a separate fresh-loaded full warehouse. Independent source-ledger calculations also matched invoice/period values. The earlier verified 33-test financial source checkpoint is `16ca52d77e7a8fbd196161345f9424d47c27e2de`, preserved in `run01`; the latest `run02` adds explicit current-Account verification. The [financial contract](financial-contract.md) gives the exact scope, calculations and limitations.
 
-## Completed lifecycle and reconciliation checkpoint — October 25
+## Completed lifecycle and reconciliation checkpoint â€” October 25
 
 The [complete Pass 2 local acceptance](evidence/pass2-complete/README.md) extends the preserved slice with contract-backed expansion, contraction, cancellation and renewal; explicitly linked corrections; business-month validity and source-observation cutoffs; six dbt models; incremental/full-refresh equality; an independent Python ledger oracle; actual PostgreSQL analytical-query parity; nine governed variance categories; and durable financial cases/history.
 
