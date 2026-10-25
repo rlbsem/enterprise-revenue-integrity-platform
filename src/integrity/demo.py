@@ -78,6 +78,7 @@ def execute(stack):
         "native_vendor_calls": 0,
         "executed_at": datetime.now(UTC).isoformat(),
         "python": sys.version.split()[0],
+        "postgresql": server_version(stack),
         "platform": platform.system(),
         "source_events": stack.events,
         "source_events_hash": digest(stack.events),
@@ -87,6 +88,13 @@ def execute(stack):
         "totals": totals,
         "persisted_state": state,
     }
+
+
+def server_version(stack):
+    with connect(stack.config["control_dsn"]) as c:
+        return c.execute("SELECT current_setting('server_version') AS version").fetchone()[
+            "version"
+        ]
 
 
 def main():

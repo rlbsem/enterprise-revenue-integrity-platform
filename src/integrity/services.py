@@ -41,6 +41,10 @@ def create_app(kind=None, dsn=None, token=None, injector=None):
 
     if kind == "salesforce":
 
+        @app.get("/accounts/{record_id}", dependencies=[Depends(authorized)])
+        def account(record_id: str, tenant: str, entity: str):
+            return source_read("accounts", record_id, tenant, entity)
+
         @app.get("/events/{record_id}", dependencies=[Depends(authorized)])
         def event(record_id: str, tenant: str, entity: str):
             return source_read("events", record_id, tenant, entity)

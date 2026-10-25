@@ -149,6 +149,14 @@ def test_event_identity_collision_preserves_original(stack, controller):
     assert rows(stack, "inbox")[0]["body"] == stack.events[0]
 
 
+def test_current_account_missing_or_outside_scope_blocks(stack, controller):
+    with connect(stack.admins["salesforce"]) as c:
+        c.execute("UPDATE accounts SET entity='EU' WHERE id=%s", (stack.events[0]["account_id"],))
+    assert controller.ingest(stack.events[0])["detail"] == "source_record_or_scope_missing"
+    assert rows(stack) == []
+    assert rows(stack, "effects", "stripe") == []
+
+
 def test_interrupted_before_dispatch_durable_intent_survives(stack, controller):
     planned(stack, controller)
     replacement = Controller(stack.config)

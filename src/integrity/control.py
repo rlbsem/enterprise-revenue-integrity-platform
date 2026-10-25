@@ -38,8 +38,11 @@ class Controller:
             event_response = client.get("/events/" + event["event_id"], params=scope)
             current = client.get("/opportunities/" + event["opportunity_id"], params=scope)
             contract = client.get("/contracts/" + event["contract_id"], params=scope)
-        if any(r.status_code != 200 for r in (event_response, current, contract)):
+            account = client.get("/accounts/" + event["account_id"], params=scope)
+        if any(r.status_code != 200 for r in (event_response, current, contract, account)):
             raise Refused("source_record_or_scope_missing")
+        if account.json().get("Id") != event["account_id"]:
+            raise Refused("current_account_identity_mismatch")
         if event_response.json() != event:
             raise Refused("source_event_exact_content_mismatch")
         if current.json() != event:
@@ -355,7 +358,8 @@ class Controller:
                             self.exception(
                                 c,
                                 event,
-                                "new_finance_intent_blocked:" + type(exc).__name__,
+                                "new_finance_intent_blocked:"
+                                + (str(exc) if isinstance(exc, Refused) else "source_unavailable"),
                                 effect_id,
                             )
                     else:
