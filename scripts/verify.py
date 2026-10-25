@@ -25,7 +25,9 @@ def source_hashes():
     for directory in ("src", "tests", "scripts"):
         files.extend(p for p in (ROOT / directory).rglob("*") if p.suffix in (".py", ".sql"))
     return {
-        p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+        p.relative_to(ROOT).as_posix(): hashlib.sha256(
+            p.read_text(encoding="utf-8").encode()
+        ).hexdigest()
         for p in sorted(files)
     }
 
@@ -95,6 +97,7 @@ def main():
             ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
         ).strip(),
         "working_tree_source_hashes_authoritative": True,
+        "source_hash_encoding": "UTF-8 with LF line endings",
         "source_hashes": source_hashes(),
         "test_count": int(suite.attrib["tests"]),
         "failures": int(suite.attrib["failures"]),
