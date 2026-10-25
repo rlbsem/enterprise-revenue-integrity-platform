@@ -275,7 +275,7 @@ def test_receiver_database_credentials_cannot_open_finance_database(stack):
     from psycopg.conninfo import conninfo_to_dict, make_conninfo
 
     target = conninfo_to_dict(stack.admins["netsuite"])["dbname"]
-    with pytest.raises(psycopg.errors.InsufficientPrivilege):
+    with pytest.raises(psycopg.OperationalError, match="permission denied for database"):
         with psycopg.connect(make_conninfo(stack.app_dsns["stripe"], dbname=target)):
             pass
 

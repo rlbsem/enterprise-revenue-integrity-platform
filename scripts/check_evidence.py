@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     verified = 0
-    for manifest in (ROOT / "docs/evidence").glob("*/manifest.json"):
+    for manifest in (ROOT / "docs/evidence").glob("**/manifest.json"):
         expected = json.loads(manifest.read_text())
         actual = {
             p.name
