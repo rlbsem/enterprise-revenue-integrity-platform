@@ -51,6 +51,14 @@ Publication writes a content-addressed JSON release after dbt and independent fi
 python -m integrity.finance_demo --workspace .local/finance-01 --output .local/finance-01.json
 ```
 
-## Scope still open in Pass 2
+## Contract lifecycle and temporal extension
 
-This slice implements credits, bounded explicit proration, partial settlement, unposted adjustments, backdated credit correction, duplicate rejection and mapping/activation coverage. It does **not yet complete** subscription expansion/contraction/cancellation workflows, a full nine-category governed Variance Bridge, business-time/SCD corrections, a native Snowflake adapter, or operator-authorized corrective dispatch. Snowflake execution is not claimed; the warehouse contract is currently implemented only in DuckDB. See [the progress ledger](progress.md).
+[Executed lifecycle acceptance](evidence/pass2-complete/README.md) adds explicit CRM-authored contract changes, separately receipted billing amendments and finance postings. Supported recurring changes start on a month boundary; billing is quarterly and quarter-aligned. A linked correction replaces a prior logical change while retaining every original source event. Cancellation sets future recurring price to zero; renewal starts a new term and creates a separate subscription/invoice. Signed amendment lines reconcile invoiced changes without mutating original invoice lines.
+
+The reporting quarter and source-observation cutoff are explicit inputs. Six models expose commercial obligations and billed subscription history at business-month grain, invoice reconciliation and separate period measures. The current knowledge cutoff and an earlier February 10 cutoff produce independently checked historical values. Changing a source cutoff recomputes affected invoice keys; the incremental target uses delete/insert key replacement. Missing target keys trigger full refresh. This does not claim a selective-rebuild performance improvement.
+
+All six models match a separate fresh-loaded full build. The same compiled SELECTs are translated and actually executed against a separate local PostgreSQL warehouse, comparing every typed value. Snowflake SQL is generated and parsed only; there is no native Snowflake adapter execution. The portability acceptance declares JSON landing types explicitly; a JSONB/JSON function incompatibility was found and fixed before qualification.
+
+The complete bridge retains non-additive comparison bases. Posting lag is explained only by an independent posting dated outside the compared period; an unexplained remainder stays open. Credits, proration, settlement, activation/mapping gaps, contract mismatch, backdated revisions and actual duplicate-delivery observations remain distinguishable. Verified observations and case histories persist in PostgreSQL, scoped by tenant/legal entity and reporting period.
+
+Remaining acceptance is security/recovery hardening and the operator experience, followed by the separate independent audit. Arbitrary daily recurring proration, taxation, FX, refunds and recognized-revenue schedules remain outside this finite policy.

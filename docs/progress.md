@@ -5,8 +5,8 @@ This ledger records implementation state against Master Roadmap V1.0. It is not 
 | Pass | Scope | State |
 |---|---|---|
 | 1 | Cross-system PostgreSQL/HTTP foundation, identity, durable execution and recovery | Passed: 20 local tests/demo and GitHub CI; evidence checkpoint `adcc4e183c9bde32b2e0c5f5bfec8b718e04ccc0` |
-| 2 | Financial contracts, dbt, 3-Number Truth Test, Variance Bridge, independent oracle | Verified partial slice: 34 tests, four models/18 dbt tests in each of three builds; broader lifecycle/bridge scope remains open |
-| 3 | Adversarial security/recovery hardening | Pending; author's review is not the independent Astra audit |
+| 2 | Financial contracts, lifecycle, temporal models, bridge, oracle and portability | Local gate passed: 43 tests; six models/23 dbt tests; recorded under pass2-complete/run01 |
+| 3 | Adversarial security/recovery hardening | In progress; separate independent audit remains pending |
 | 4 | Authenticated API-backed operator console and browser acceptance | Pending |
 | 5 | Final package verification and independent architecture/security acceptance | Independent audit pending |
 
@@ -29,6 +29,10 @@ Foundation checkpoint CI passed: [push run](https://github.com/rlbsem/enterprise
 
 The final [qualified slice](evidence/pass2/README.md) passed 34 Python tests and three actual dbt builds, each with four models and 18 data tests, at source `85bf1f6af4512a4d5d30dc0287ff1bf74851d0ea`. Every corrected model matched a separate fresh-loaded full warehouse. Independent source-ledger calculations also matched invoice/period values. The earlier verified 33-test financial source checkpoint is `16ca52d77e7a8fbd196161345f9424d47c27e2de`, preserved in `run01`; the latest `run02` adds explicit current-Account verification. The [financial contract](financial-contract.md) gives the exact scope, calculations and limitations.
 
-Open before advancing the complete Pass 2 gate: contract-backed subscription expansion/contraction/cancellation, business-time/SCD corrections, the remaining governed variance categories, and a tested warehouse portability contract. Passes 3â€“5 have not been marked complete. The author has not performed the separate independent Astra audit.
+## Completed lifecycle and reconciliation checkpoint — October 25
 
-Continuation must use the existing branch/draft PR and preserve both passes' evidence. Complete those open financial gates before declaring Pass 2 finished or advancing the complete roadmap. No new default dispatch operation or native vendor execution is implied by the analytical source-event slice. No merge or deployment has occurred.
+The [complete Pass 2 local acceptance](evidence/pass2-complete/README.md) extends the preserved slice with contract-backed expansion, contraction, cancellation and renewal; explicitly linked corrections; business-month validity and source-observation cutoffs; six dbt models; incremental/full-refresh equality; an independent Python ledger oracle; actual PostgreSQL analytical-query parity; nine governed variance categories; and durable financial cases/history.
+
+The original $1,500 unposted variance remains open. Current lifecycle Q1 net billing is $39,000, ERP invoice postings $37,500, allocated cash $16,500 and ARR $120,000 separately. Historical reconstruction and the 2027 renewal period have distinct results and source provenance. No production/native business-vendor execution is claimed.
+
+Next: authenticated scoped operators, controlled remediation, fencing/coverage/publication hardening, then the working console and final internal acceptance. The separate independent Astra audit remains open. Continue on this branch/PR; preserve all previous evidence.
