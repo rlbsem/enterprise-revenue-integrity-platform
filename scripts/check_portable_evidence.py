@@ -138,6 +138,15 @@ def check(folder, failed=False):
         assert {r["effect_id"] for r in initial["receivers"][service]["effects"]} == {
             r["effect_id"] for r in restarted["receivers"][service]["effects"]
         }
+    for snapshot in [initial, restarted]:
+        exhausted = [
+            r
+            for r in snapshot["roles"]["auditor"]["outbox"]
+            if r["event_id"] == "sf-recovery-v1" and r["destination"] == "stripe"
+        ]
+        assert len(exhausted) == 1
+        assert exhausted[0]["status"] == "exhausted"
+        assert exhausted[0]["attempts"] == exhausted[0]["max_attempts"] == 3
     life = json.loads((folder / "lifecycle.json").read_bytes())
     assert digest(life["source_snapshot"]) == life["source_hash"]
     assert life["current_release"]["rows"] == oracle(life["source_snapshot"])
@@ -150,6 +159,14 @@ def check(folder, failed=False):
         assert life[name]["models"] == 6 and life[name]["tests"] >= 15
         assert all(n["status"] in ["success", "pass"] for n in life[name]["results"])
     browser = json.loads((folder / "browser/browser.json").read_bytes())
+    assert len(browser["cases"]) >= 43 and {
+        "rejection did not dispatch",
+        "actual approved effect and dependent finance verified",
+        "recovery budget persisted",
+        "original 1500 variance still open",
+        "EU principal cannot read US",
+        "caller cannot override tenant",
+    } <= set(browser["cases"])
     assert browser["initial"] == {"billing_cents": "3900000", "erp_cents": "3750000"}
     assert browser["final"] == {"billing_cents": "4560000", "erp_cents": "4410000"}
     assert not browser["errors"] and len(browser["accessibility"]) == 10
