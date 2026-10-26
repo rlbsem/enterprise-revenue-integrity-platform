@@ -192,7 +192,7 @@ def inspect(state):
                     .values()
                 ),
                 "outbox": c.execute(
-                    "SELECT effect_id,tenant,entity,event_id,destination,status,attempts,max_attempts,payload,hash FROM outbox ORDER BY effect_id"
+                    "SELECT effect_id,tenant,entity,event_id,destination,status,attempts,max_attempts,payload,hash,authorization_proposal FROM outbox ORDER BY effect_id"
                 ).fetchall(),
                 "runs": c.execute(
                     "SELECT tenant,entity,report FROM financial_runs ORDER BY created_at"
@@ -201,10 +201,10 @@ def inspect(state):
                     "SELECT tenant,entity,state,amount_cents FROM financial_cases ORDER BY id"
                 ).fetchall(),
                 "decisions": c.execute(
-                    "SELECT result FROM decisions ORDER BY created_at"
+                    "SELECT proposal_id,result FROM decisions ORDER BY created_at"
                 ).fetchall(),
                 "jobs": c.execute(
-                    "SELECT id,state,detail,fence FROM reconciliation_jobs ORDER BY created_at"
+                    "SELECT id,proposal_id,state,detail,fence FROM reconciliation_jobs ORDER BY created_at"
                 ).fetchall(),
                 "proposals": c.execute(
                     "SELECT id,state,detail FROM proposals ORDER BY created_at"

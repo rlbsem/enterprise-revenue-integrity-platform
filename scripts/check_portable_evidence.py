@@ -163,6 +163,19 @@ def check(folder, failed=False):
         assert life[name]["models"] == 6 and life[name]["tests"] >= 15
         assert all(n["status"] in ["success", "pass"] for n in life[name]["results"])
     browser = json.loads((folder / "browser/browser.json").read_bytes())
+    if "review_proposals" in browser:
+        ids = browser["review_proposals"]
+        assert ids["approved"] != ids["rejected"]
+        decisions = {d["proposal_id"]: d["result"] for d in after["roles"]["auditor"]["decisions"]}
+        assert decisions[ids["rejected"]] == "rejected" and decisions[ids["approved"]] == "approved"
+        assert (
+            next(o for o in recovered if o["destination"] == "stripe")["authorization_proposal"]
+            == ids["approved"]
+        )
+        assert any(
+            j["proposal_id"] == ids["approved"] and j["state"] == "verified"
+            for j in after["roles"]["auditor"]["jobs"]
+        )
     assert len(browser["cases"]) >= 43 and {
         "rejection did not dispatch",
         "actual approved effect and dependent finance verified",
