@@ -14,7 +14,7 @@ from integrity.contracts import digest  # noqa: E402
 from integrity.finance import oracle, oracle_period  # noqa: E402
 
 
-def check(folder):
+def check(folder, failed=False):
     manifest = json.loads((folder / "artifact-integrity.json").read_bytes())
     assert set(manifest) == {
         p.relative_to(folder).as_posix()
@@ -33,17 +33,18 @@ def check(folder):
                 r"postgresql?://|-----BEGIN .*PRIVATE KEY|(?:AKIA|ASIA)[A-Z0-9]{16}", raw.decode()
             )
     report = json.loads((folder / "portable.json").read_bytes())
-    assert (
-        report["status"] == "passed"
-        and not report["native_vendor_execution"]
-        and not report["cloud_resources"]
-    )
+    assert not report["native_vendor_execution"] and not report["cloud_resources"]
     assert re.fullmatch(r"[a-f0-9]{40}", report["source_commit"])
     for name, h in report["source_hashes"].items():
         blob = subprocess.check_output(
             ["git", "show", report["source_commit"] + ":" + name], cwd=ROOT
         )
         assert hashlib.sha256(blob).hexdigest() == h, name
+    if failed:
+        assert report["status"] == "failed" and report["cleanup"]["verified_absent"]
+        assert not any(report["cleanup"]["independent_label_inventory"].values())
+        return {"status": "preserved_failure", "source_commit": report["source_commit"]}
+    assert report["status"] == "passed"
     assert report["normal_shutdown"]["clean_exit"] and report["restarted_shutdown"]["clean_exit"]
     assert all(report["fresh_restart"].values())
     if report["lane"] == "actual_docker_compose":
@@ -168,5 +169,6 @@ def check(folder):
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("folder", type=Path)
+    p.add_argument("--failed", action="store_true")
     a = p.parse_args()
-    print(json.dumps(check(a.folder)))
+    print(json.dumps(check(a.folder, a.failed)))

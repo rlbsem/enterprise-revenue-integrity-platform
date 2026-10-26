@@ -11,6 +11,9 @@
 **/__pycache__/
 **/*.pyc
 **/.local/
+**/.git/
+**/.env*
+**/*credentials*
 **/*private*
 **/*.pem
 **/*.key
@@ -18,3 +21,4 @@
 **/*.sqlite*
 dbt/target/
 dbt/logs/
+dbt/profiles.yml

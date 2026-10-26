@@ -15,7 +15,7 @@ RUN python -m pip install --no-cache-dir -r requirements.lock
 COPY src/ src/
 COPY dbt/ dbt/
 COPY web/ web/
-RUN python -m pip install --no-deps --no-build-isolation -e . && python -m pip check
+RUN python -m pip install --no-deps -e . && python -m pip check
 USER 10001:10001
 EXPOSE 8080
 ENTRYPOINT ["python", "-m", "integrity.portable"]

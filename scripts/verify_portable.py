@@ -46,6 +46,8 @@ class Lane:
     def __init__(self, work, native):
         self.work, self.native = work, native
         work.mkdir(parents=True)
+        if os.name != "nt":
+            work.chmod(0o700)
         self.state = work / "state"
         with socket.socket() as s:
             s.bind(("127.0.0.1", 0))
@@ -316,6 +318,9 @@ def main():
                 for u in ["auditor", "operator", "approver", "reader_eu", "outsider"]
             },
         )
+        if os.name != "nt":
+            private_browser.chmod(0o700)
+            (private_browser / "operator-credentials.json").chmod(0o600)
         lane.run(
             [
                 "node",
@@ -364,7 +369,11 @@ def main():
         report["error_type"] = type(error).__name__
         raise
     finally:
-        report["cleanup"] = lane.cleanup()
+        try:
+            report["cleanup"] = lane.cleanup()
+        except Exception as error:
+            report["status"] = "failed"
+            report["cleanup"] = {"verified_absent": False, "error_type": type(error).__name__}
         report["finished_at"] = datetime.now(UTC).isoformat()
         assert sources() == source, "source_changed_during_verification"
         write(a.output / "portable.json", report)
@@ -376,6 +385,7 @@ def main():
                 if f.is_file() and f.name != "artifact-integrity.json"
             },
         )
+    assert report["status"] == "passed", "packaged_acceptance_or_cleanup_failed"
     print(
         json.dumps({"status": report["status"], "lane": report["lane"], "cleanup_verified": True})
     )
