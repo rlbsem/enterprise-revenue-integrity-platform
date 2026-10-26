@@ -151,7 +151,7 @@ def check(folder):
     browser = json.loads((folder / "browser/browser.json").read_bytes())
     assert browser["initial"] == {"billing_cents": "3900000", "erp_cents": "3750000"}
     assert browser["final"] == {"billing_cents": "4560000", "erp_cents": "4410000"}
-    assert not browser["errors"] and len(browser["accessibility"]) == 9
+    assert not browser["errors"] and len(browser["accessibility"]) == 10
     assert all(not r["violations"] for r in browser["accessibility"])
     assert len(browser["screenshots"]) == 5
     for name, h in browser["screenshots"].items():

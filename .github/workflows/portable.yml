@@ -29,6 +29,8 @@ jobs:
       - run: npx --yes pnpm@11.25.0 install --frozen-lockfile --ignore-scripts
       - run: node node_modules/playwright/cli.js install chromium
         timeout-minutes: 5
+      - name: Build public-source normal image
+        run: docker compose --progress plain build demo
       - run: python scripts/verify_portable.py --workspace .local/portable-ci --output .local/portable-evidence
       - run: python scripts/check_portable_evidence.py .local/portable-evidence
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
