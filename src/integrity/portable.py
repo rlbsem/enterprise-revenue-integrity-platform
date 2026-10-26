@@ -239,6 +239,11 @@ def inspect(state):
         rls=rls,
         receivers=receivers,
         financial_jobs=financial_jobs,
+        container_memory={
+            name: (Path("/sys/fs/cgroup") / name).read_text().strip()
+            for name in ["memory.events", "memory.current", "memory.peak", "memory.max"]
+            if (Path("/sys/fs/cgroup") / name).is_file()
+        },
         source_hashes={
             p.relative_to(Path(__file__).resolve().parents[2]).as_posix(): hashlib.sha256(
                 p.read_text(encoding="utf-8").encode()

@@ -37,10 +37,20 @@ jobs:
         run: docker compose --progress plain build demo
       - run: python scripts/verify_portable.py --workspace .local/portable-ci --output .local/portable-evidence
       - run: python scripts/check_portable_evidence.py .local/portable-evidence
+      - name: Independent fresh-state repetition
+        run: python scripts/verify_portable.py --workspace .local/portable-repeat-ci --output .local/portable-repeat-evidence
+      - run: python scripts/check_portable_evidence.py .local/portable-repeat-evidence
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
           name: portable-operator-evidence
           path: .local/portable-evidence/
+          if-no-files-found: warn
+          retention-days: 14
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: portable-repeat-evidence
+          path: .local/portable-repeat-evidence/
           if-no-files-found: warn
           retention-days: 14

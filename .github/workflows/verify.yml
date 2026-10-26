@@ -34,5 +34,7 @@ jobs:
       - run: python scripts/verify.py --workspace .local/ci --output .local/ci-evidence
       - run: python -m pip_audit -r requirements.lock --no-deps --disable-pip --strict
       - run: npx --yes pnpm@11.25.0 install --frozen-lockfile --ignore-scripts
-      - run: node node_modules/playwright/cli.js install --with-deps chromium
+      # Ubuntu's hosted image already supplies the Chromium system libraries.
+      - run: node node_modules/playwright/cli.js install chromium
+        timeout-minutes: 5
       - run: python scripts/verify_browser.py --workspace .local/browser-ci --output .local/browser-ci-evidence
