@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import socket
 import subprocess
 import sys
@@ -78,6 +79,25 @@ class Lane:
         )
         if result.returncode:
             (self.work / (name + "-private.log")).write_bytes(result.stdout + result.stderr)
+            if name == "browser_acceptance":
+                # Raw Playwright logs can contain a filled password. Only known
+                # public assertion labels may enter the diagnostic artifact.
+                raw = result.stderr.decode(errors="replace")
+                labels = re.findall(
+                    r'check\("([^"\n]+)"', (ROOT / "scripts/browser_acceptance.cjs").read_text()
+                )
+                marker = (
+                    "timed_out_waiting_for_verified_state"
+                    if "timed_out_waiting_for_verified_state" in raw
+                    else "browser_assertion_or_locator_failure"
+                )
+                write(
+                    self.work / "browser-diagnostic.json",
+                    {
+                        "classification": marker,
+                        "public_assertions": [label for label in labels if label in raw],
+                    },
+                )
             raise RuntimeError(name + "_failed_inspect_private_log")
         return result.stdout
 
@@ -367,6 +387,13 @@ def main():
     except Exception as error:
         report["status"] = "failed"
         report["error_type"] = type(error).__name__
+        try:
+            write(a.output / "failure-observation.json", lane.inspect())
+            diagnostic = lane.work / "browser-diagnostic.json"
+            if diagnostic.exists():
+                report["browser_diagnostic"] = json.loads(diagnostic.read_bytes())
+        except Exception as diagnostic_error:
+            report["diagnostic_error_type"] = type(diagnostic_error).__name__
         raise
     finally:
         try:

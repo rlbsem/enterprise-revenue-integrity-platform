@@ -203,6 +203,12 @@ def inspect(state):
                 "decisions": c.execute(
                     "SELECT result FROM decisions ORDER BY created_at"
                 ).fetchall(),
+                "jobs": c.execute(
+                    "SELECT id,state,detail,fence FROM reconciliation_jobs ORDER BY created_at"
+                ).fetchall(),
+                "proposals": c.execute(
+                    "SELECT id,state,detail FROM proposals ORDER BY created_at"
+                ).fetchall(),
             }
     with connect(config["control_dsn"]) as c:
         rls = c.execute(
@@ -215,11 +221,24 @@ def inspect(state):
                 table: c.execute("SELECT * FROM " + table + " ORDER BY 1").fetchall()
                 for table in ["effects", "records", "requests"]
             }
+    financial_jobs = []
+    for path in sorted((run / "console-worker/jobs").glob("*/dbt/target/run_results.json")):
+        result = json.loads(path.read_bytes())
+        financial_jobs.append(
+            {
+                "job": path.parents[2].name,
+                "results": [
+                    {"id": r["unique_id"], "status": r["status"], "message": r.get("message")}
+                    for r in result["results"]
+                ],
+            }
+        )
     return dict(
         run=record["run"],
         roles=observations,
         rls=rls,
         receivers=receivers,
+        financial_jobs=financial_jobs,
         source_hashes={
             p.relative_to(Path(__file__).resolve().parents[2]).as_posix(): hashlib.sha256(
                 p.read_text(encoding="utf-8").encode()
