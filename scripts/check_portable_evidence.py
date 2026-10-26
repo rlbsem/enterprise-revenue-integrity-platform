@@ -41,8 +41,12 @@ def check(folder, failed=False):
         )
         assert hashlib.sha256(blob).hexdigest() == h, name
     if failed:
-        assert report["status"] == "failed" and report["cleanup"]["verified_absent"]
-        assert not any(report["cleanup"]["independent_label_inventory"].values())
+        assert report["status"] == "failed"
+        if report["lane"] == "actual_docker_compose":
+            assert report["cleanup"]["verified_absent"]
+            assert not any(report["cleanup"]["independent_label_inventory"].values())
+        else:
+            assert report["cleanup"]["owned_process_exited"]
         return {"status": "preserved_failure", "source_commit": report["source_commit"]}
     assert report["status"] == "passed"
     assert report["normal_shutdown"]["clean_exit"] and report["restarted_shutdown"]["clean_exit"]

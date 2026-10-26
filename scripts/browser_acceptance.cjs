@@ -56,6 +56,10 @@ async function until(fn,timeout=150000){const deadline=Date.now()+timeout;while(
   await auditor.page.screenshot({path:path.join(output,"console-lineage.png"),fullPage:true});
   const op=await actor(browser,"operator");await op.page.getByRole("button",{name:"Exceptions & delivery",exact:true}).click();
   await op.page.getByLabel("Why is another bounded attempt safe?").fill("Synthetic receiver outage cleared; review the unchanged contract and payload.");
+  const reasonBeforeRefresh=await op.page.getByLabel("Why is another bounded attempt safe?").elementHandle();
+  await op.page.getByRole("button",{name:"Refresh evidence",exact:true}).click();
+  await until(()=>reasonBeforeRefresh.evaluate(e=>!e.isConnected),15000);
+  check("operator draft survives refresh",(await op.page.getByLabel("Why is another bounded attempt safe?").inputValue())==="Synthetic receiver outage cleared; review the unchanged contract and payload.");
   await op.page.getByRole("button",{name:"Propose recovery",exact:true}).click();await op.page.getByText("Exact recovery proposed.",{exact:false}).waitFor();
   const approver=await actor(browser,"approver");await approver.page.getByRole("button",{name:"Exceptions & delivery",exact:true}).click();
   await approver.page.getByLabel("Review note",{exact:true}).fill("Reject this first proposal pending an explicit source review.");
@@ -71,6 +75,11 @@ async function until(fn,timeout=150000){const deadline=Date.now()+timeout;while(
   await approver.page.getByRole("button",{name:"Refresh evidence",exact:true}).click();
   await until(()=>noteBeforeRefresh.evaluate(e=>!e.isConnected),15000);
   check("approval draft survives refresh",(await approver.page.getByLabel("Review note",{exact:true}).inputValue())==="Exact hash, owner and scoped identity confirmed. Permit the bounded retry only.");
+  const noteBeforeScope=await approver.page.getByLabel("Review note",{exact:true}).elementHandle();
+  await approver.page.locator("#scope").selectOption("US");
+  await until(()=>noteBeforeScope.evaluate(e=>!e.isConnected),15000);
+  check("review draft cleared on scope change",(await approver.page.getByLabel("Review note",{exact:true}).inputValue())==="");
+  await approver.page.getByLabel("Review note",{exact:true}).fill("Exact hash, owner and scoped identity confirmed. Permit the bounded retry only.");
   const [approvalResponse]=await Promise.all([
    approver.page.waitForResponse(r=>r.url().includes("/decision")&&r.request().method()==="POST"),
    approver.page.getByRole("button",{name:"Approve exact recovery",exact:true}).click()
