@@ -32,6 +32,8 @@ If port 8582 is occupied, choose another port **before starting**. On PowerShell
 4. **Approver:** Sign in separately and reject the proposal. No dispatch occurs. Ask the operator to create a new proposal, then review and approve that exact payload. The worker revalidates identity, current source authority, approval and attempt budget before dispatch.
 5. **Auditor:** Refresh after the durable financial recheck. Independently verified billing and finance effects produce $45,600 billing / $44,100 ERP, cash still $16,500 and ARR $146,400. The $1,500 issue stays open. Inspect the decision ledger and source records; none of these measures establishes recognized revenue or a commercial outcome.
 
+Unsubmitted proposal reasons and review notes survive an evidence refresh only for the same action/proposal and content hash. They remain in browser memory, clear on scope change or logout, and are removed after a successful submission. A note is never transferred from a rejected proposal to a new proposal, even when the payload is identical. Refresh responses cannot replace newer evidence or interrupt typing. The server still independently decides whether each exact action is authorized.
+
 [Detailed operator walkthrough](operator-console.md) · [Financial definitions](financial-contract.md) · [Security](security.md).
 
 ## Stop and start fresh

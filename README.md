@@ -24,7 +24,7 @@ Use `operator` to propose and `approver` to decide. Startup runs the actual Post
 
 [Executed Docker acceptance, recovery evidence and fresh screenshots](docs/evidence/portable/README.md).
 
-![Actual authenticated reconciliation console](docs/evidence/operator-console/run02/console-overview.png)
+![Actual packaged reconciliation console](docs/evidence/portable/compose-run02/browser/console-overview.png)
 
 ## Follow the difference
 

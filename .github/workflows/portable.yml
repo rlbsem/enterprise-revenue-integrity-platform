@@ -29,7 +29,11 @@ jobs:
       - name: Check preserved portable records
         run: |
           python scripts/check_portable_evidence.py docs/evidence/portable/compose-run01
+          python scripts/check_portable_evidence.py docs/evidence/portable/compose-run02
           python scripts/check_portable_evidence.py docs/evidence/portable/failed-build-run01 --failed
+          python scripts/check_portable_evidence.py docs/evidence/portable/failed-approval-run01 --failed
+          python scripts/check_portable_evidence.py docs/evidence/portable/failed-diagnostic-run01 --failed
+          python scripts/check_portable_evidence.py docs/evidence/portable/failed-targeting-run01 --failed
       - run: npx --yes pnpm@11.25.0 install --frozen-lockfile --ignore-scripts
       - run: node node_modules/playwright/cli.js install chromium
         timeout-minutes: 5

@@ -1,0 +1,27 @@
+{
+  "notes": [
+    {
+      "id": "note-c022d32a-7fea-4ab0-91f3-ea8a7ede9928",
+      "length": 0
+    }
+  ],
+  "drafts": [
+    {
+      "key": "review:8bfdce87-b60a-488b-a58e-ed249b8f63fd:c2133488a33c9e254d63066d71cdebc3cc8aadfd05d4ffd58c4b37cb5e7bd928",
+      "length": 79
+    }
+  ],
+  "proposals": [
+    {
+      "id": "c022d32a-7fea-4ab0-91f3-ea8a7ede9928",
+      "state": "pending",
+      "payload_hash": "c2133488a33c9e254d63066d71cdebc3cc8aadfd05d4ffd58c4b37cb5e7bd928"
+    },
+    {
+      "id": "8bfdce87-b60a-488b-a58e-ed249b8f63fd",
+      "state": "rejected",
+      "payload_hash": "c2133488a33c9e254d63066d71cdebc3cc8aadfd05d4ffd58c4b37cb5e7bd928"
+    }
+  ],
+  "refresh_version": 6
+}

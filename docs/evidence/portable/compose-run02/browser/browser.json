@@ -1,0 +1,138 @@
+{
+  "executed_at": "2026-10-26T19:17:01.769Z",
+  "source_commit": "e8f6493c9f9001867a00b1dc34bad1c5e9a687d0",
+  "source_hash_encoding": "UTF-8 with LF line endings",
+  "source_hashes": {
+    "web/index.html": "9c1d8bf190d7a5535584fc30b2b80904b0ff21d88e129f24587e116dae13c743",
+    "web/app.css": "a1a7a7a38d8e076afdcc42739dc22f6a9ee68a5271fd9af03a99c46e129e72b8",
+    "web/app.js": "7d10a74943ae8b0cf835dd2e6d0ffd84e55c8194120ad7913f9760f4bfd77fac",
+    "scripts/browser_acceptance.cjs": "9c4a0213315cd784c7745dbf9ca3ad90e122ab6c65fad31df43835cf4bb70e18",
+    "scripts/verify_browser.py": "1ef3b562ce8e48d6a4e7b666a0adff49ff292a638343aec126b064741ae308b2",
+    "package.json": "9d24e52cb93835d1e880e35d91bb2d1d69c1c9f15dcf829a19f479c94d9eaa61",
+    "pnpm-lock.yaml": "99f71bf92923160a5c57a977aa82cf9c3f68a5b509bacc163979e1b207a52f35"
+  },
+  "browser": "151.0.7922.34",
+  "lane": "actual_local_postgresql_http_console",
+  "cases": [
+    "login readable Unicode",
+    "login no document overflow",
+    "keyboard skip link",
+    "initial Q1 billing 39000",
+    "initial Q1 ERP 37500",
+    "initial ARR 120000",
+    "desktop reconciliation readable Unicode",
+    "desktop reconciliation no document overflow",
+    "desktop operations readable Unicode",
+    "desktop operations no document overflow",
+    "desktop lineage readable Unicode",
+    "desktop lineage no document overflow",
+    "desktop audit readable Unicode",
+    "desktop audit no document overflow",
+    "fresh canonical receipt visible",
+    "operator draft survives refresh",
+    "rejection did not dispatch",
+    "approval queue readable Unicode",
+    "approval queue no document overflow",
+    "approval draft survives refresh",
+    "review draft cleared on scope change",
+    "explicit approval request committed",
+    "actual approved effect and dependent finance verified",
+    "recovery budget persisted",
+    "rechecked ERP 44100",
+    "cash remains 16500",
+    "rechecked ARR 146400",
+    "original 1500 variance still open",
+    "download is actual scoped JSON",
+    "download excludes auditor credential",
+    "download excludes operator credential",
+    "download excludes approver credential",
+    "download excludes reader_eu credential",
+    "download excludes outsider credential",
+    "EU principal cannot read US",
+    "caller cannot override tenant",
+    "EU-only records",
+    "mobile overview readable Unicode",
+    "mobile overview no document overflow",
+    "mobile operations readable Unicode",
+    "mobile operations no document overflow",
+    "mobile lineage readable Unicode",
+    "mobile lineage no document overflow",
+    "mobile audit readable Unicode",
+    "mobile audit no document overflow",
+    "logout revokes session",
+    "no browser script errors"
+  ],
+  "accessibility": [
+    {
+      "view": "login",
+      "violations": [],
+      "passes": 17
+    },
+    {
+      "view": "desktop reconciliation",
+      "violations": [],
+      "passes": 23
+    },
+    {
+      "view": "desktop operations",
+      "violations": [],
+      "passes": 19
+    },
+    {
+      "view": "desktop lineage",
+      "violations": [],
+      "passes": 19
+    },
+    {
+      "view": "desktop audit",
+      "violations": [],
+      "passes": 23
+    },
+    {
+      "view": "approval queue",
+      "violations": [],
+      "passes": 23
+    },
+    {
+      "view": "mobile overview",
+      "violations": [],
+      "passes": 24
+    },
+    {
+      "view": "mobile operations",
+      "violations": [],
+      "passes": 19
+    },
+    {
+      "view": "mobile lineage",
+      "violations": [],
+      "passes": 20
+    },
+    {
+      "view": "mobile audit",
+      "violations": [],
+      "passes": 24
+    }
+  ],
+  "errors": [],
+  "initial": {
+    "billing_cents": "3900000",
+    "erp_cents": "3750000"
+  },
+  "final": {
+    "billing_cents": "4560000",
+    "erp_cents": "4410000"
+  },
+  "screenshots": {
+    "console-approval.png": "3c578942944c5d4231dd73e0ffb356b70783c3c7ad20c50f72dd27564e750e0f",
+    "console-lineage.png": "2da90b7e87933036a9ccf9787083c35e7c9e0cab388ca17dcd77d7b5f72d511a",
+    "console-mobile.png": "f2aec1b87d4a7939700d30ff9cb3970af18ec0a5b2f5a977eb3af4b24081e189",
+    "console-overview.png": "feabbbed46a795c3be7dc9bdee8e39498446329c4c66a7d908e2306aae3f8f7c",
+    "console-recovered.png": "8fb70cbaa2979b6d43eb888dc604019ac066efb74d36e1bed18dd8412aafe2f2"
+  },
+  "review_proposals": {
+    "rejected": "8d1fc6c5-2cc8-42af-b90e-43159c09eaf0",
+    "approved": "48d97862-397c-48d7-95d5-4fd4a2d73acd"
+  },
+  "native_vendor_execution": false
+}
