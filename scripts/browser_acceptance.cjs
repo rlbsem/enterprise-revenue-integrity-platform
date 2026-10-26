@@ -74,6 +74,7 @@ async function until(fn,timeout=150000){const deadline=Date.now()+timeout;while(
   const noteBeforeRefresh=await approver.page.getByLabel("Review note",{exact:true}).elementHandle();
   await approver.page.getByRole("button",{name:"Refresh evidence",exact:true}).click();
   await until(()=>noteBeforeRefresh.evaluate(e=>!e.isConnected),15000);
+  fs.writeFileSync(path.join(output,"draft-observation.json"),JSON.stringify(await approver.page.evaluate(()=>({notes:[...document.querySelectorAll('textarea[id^="note-"]')].map(e=>({id:e.id,length:e.value.length})),drafts:[...reviewDrafts].map(([key,value])=>({key,length:value.length})),proposals:state.proposals.map(p=>({id:p.id,state:p.state,payload_hash:p.payload_hash})),refresh_version:state.refreshVersion})),null,2)+"\n");
   check("approval draft survives refresh",(await approver.page.getByLabel("Review note",{exact:true}).inputValue())==="Exact hash, owner and scoped identity confirmed. Permit the bounded retry only.");
   const noteBeforeScope=await approver.page.getByLabel("Review note",{exact:true}).elementHandle();
   await approver.page.locator("#scope").selectOption("US");
