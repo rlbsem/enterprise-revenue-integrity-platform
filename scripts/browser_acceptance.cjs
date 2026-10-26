@@ -67,7 +67,15 @@ async function until(fn,timeout=150000){const deadline=Date.now()+timeout;while(
   await approver.page.getByRole("button",{name:"Refresh evidence",exact:true}).click();
   await approver.page.getByLabel("Review note",{exact:true}).fill("Exact hash, owner and scoped identity confirmed. Permit the bounded retry only.");
   await audit(approver.page,"approval queue");await approver.page.evaluate(()=>{document.activeElement.blur();window.scrollTo(0,0);});await approver.page.screenshot({path:path.join(output,"console-approval.png"),fullPage:true});
-  await approver.page.getByRole("button",{name:"Approve exact recovery",exact:true}).click();
+  const noteBeforeRefresh=await approver.page.getByLabel("Review note",{exact:true}).elementHandle();
+  await approver.page.getByRole("button",{name:"Refresh evidence",exact:true}).click();
+  await until(()=>noteBeforeRefresh.evaluate(e=>!e.isConnected),15000);
+  check("approval draft survives refresh",(await approver.page.getByLabel("Review note",{exact:true}).inputValue())==="Exact hash, owner and scoped identity confirmed. Permit the bounded retry only.");
+  const [approvalResponse]=await Promise.all([
+   approver.page.waitForResponse(r=>r.url().includes("/decision")&&r.request().method()==="POST"),
+   approver.page.getByRole("button",{name:"Approve exact recovery",exact:true}).click()
+  ]);
+  check("explicit approval request committed",approvalResponse.status()===200);
   let final;await until(async()=>{final=await overview(auditor.page);return final.jobs.some(j=>j.state==="verified")&&total(final,"billing_net_cents")===4560000n;});
   check("actual approved effect and dependent finance verified",final.effects.every(e=>e.status==="verified"));
   check("recovery budget persisted",final.effects.some(e=>e.event_id==="sf-recovery-v1"&&e.destination==="stripe"&&e.attempts===4&&e.max_attempts===6));
