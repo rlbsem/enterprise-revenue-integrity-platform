@@ -31,7 +31,9 @@ def source_hashes():
             and not any(x in p.parts for x in ["__pycache__", "target", "logs"])
         ]
     return {
-        p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+        p.relative_to(ROOT).as_posix(): hashlib.sha256(
+            p.read_text(encoding="utf-8").encode()
+        ).hexdigest()
         for p in sorted(paths)
     }
 

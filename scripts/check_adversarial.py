@@ -34,9 +34,9 @@ def check(folder):
             ["git", "show", report["source_commit"] + ":" + path], cwd=ROOT
         )
         assert hashlib.sha256(original).hexdigest() == h, "executed_source_binding_changed:" + path
-        assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == h, (
-            "current_execution_source_changed:" + path
-        )
+        assert (
+            hashlib.sha256((ROOT / path).read_text(encoding="utf-8").encode()).hexdigest() == h
+        ), "current_execution_source_changed:" + path
     names = {c["name"] for c in report["cases"]}
     assert all(
         any(required in n for n in names)
