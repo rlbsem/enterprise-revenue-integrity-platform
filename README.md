@@ -109,4 +109,4 @@ The preserved [foundation](docs/evidence/pass1/README.md), [financial slice](doc
 
 Delivery is at least once with idempotent effects under the demonstrated receiver contracts. Shared local PostgreSQL infrastructure, loopback HTTP and finite synthetic cases do not establish production isolation, HA, RPO/RTO, throughput, universal exactly-once delivery, or atomic external authorization. Snowflake SQL is syntax-only; actual warehouse execution is DuckDB and local PostgreSQL. No arbitrary daily proration, FX, tax, refunds or GAAP/IFRS recognition engine is claimed.
 
-[Progress ledger](docs/progress.md). The separate independent architecture/security audit remains pending. This application is not publicly deployed. Portable execution is submitted as a separate draft PR for review.
+[Progress ledger](docs/progress.md). Portable Docker execution and automated adversarial recovery acceptance are merged, with [source-bound evidence](docs/evidence/adversarial/README.md). An external human architecture/security audit remains pending. This application is not publicly deployed.
