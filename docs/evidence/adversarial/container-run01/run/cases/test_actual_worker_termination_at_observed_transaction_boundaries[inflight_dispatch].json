@@ -1,0 +1,21 @@
+{
+  "phase": "inflight_dispatch",
+  "actual_child_terminated": true,
+  "exit_code": -9,
+  "receiver_effects_before_termination": {
+    "stripe": 0,
+    "netsuite": 0
+  },
+  "receiver_effects_after_restart": {
+    "stripe": 1,
+    "netsuite": 1
+  },
+  "independent_successful_applications": {
+    "stripe": 1,
+    "netsuite": 1
+  },
+  "gate": {
+    "safe_to_resume": true,
+    "issues": []
+  }
+}

@@ -38,7 +38,7 @@ python scripts/check_adversarial.py
 python scripts/check_evidence.py
 ```
 
-Use fresh paths. Raw pytest logs and temporary PostgreSQL files remain private because assertion diagnostics can include generated credentials. Public observations are written separately before assertions; failed checks are retained. The checker verifies source revision bindings, artifact hashes and every historical evidence file.
+Use fresh paths. Raw pytest logs and temporary PostgreSQL files remain private because assertion diagnostics can include generated credentials. Public observations and sanitized test outcomes are written separately; failed checks are retained. The checker verifies source revision bindings, artifact hashes and every historical evidence file.
 
 ## Container acceptance
 

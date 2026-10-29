@@ -2,7 +2,7 @@ name: Adversarial security and recovery
 on:
   pull_request:
   push:
-    branches: ['feat/adversarial-recovery-acceptance']
+    branches: [main]
   workflow_dispatch:
 permissions: {contents: read}
 concurrency:
@@ -27,7 +27,9 @@ jobs:
           sudo chown 10001:"$(id -g)" .local/adversarial-container-output
           sudo chmod 0775 .local/adversarial-container-output
       - name: Verify committed acceptance and preserved history
-        run: python scripts/check_adversarial.py
+        run: |
+          python scripts/check_adversarial.py
+          python scripts/check_adversarial.py --evidence docs/evidence/adversarial/container-run01/run
       - name: Build the unchanged normal application image
         run: docker build --tag integrity-acceptance:${{ github.sha }} .
       - name: Execute real isolated PostgreSQL and HTTP adversarial probes

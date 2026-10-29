@@ -1,0 +1,41 @@
+{
+  "rejection": "missing_effect",
+  "audit_rows_before": 5,
+  "audit_rows_after": 5,
+  "receiver_effects": {
+    "stripe": 1,
+    "netsuite": 1
+  },
+  "receiver_write_journal_before": {
+    "stripe": [
+      {
+        "id": 2,
+        "operation": "apply",
+        "status": 201
+      }
+    ],
+    "netsuite": [
+      {
+        "id": 2,
+        "operation": "apply",
+        "status": 201
+      }
+    ]
+  },
+  "receiver_write_journal_after": {
+    "stripe": [
+      {
+        "id": 2,
+        "operation": "apply",
+        "status": 201
+      }
+    ],
+    "netsuite": [
+      {
+        "id": 2,
+        "operation": "apply",
+        "status": 201
+      }
+    ]
+  }
+}

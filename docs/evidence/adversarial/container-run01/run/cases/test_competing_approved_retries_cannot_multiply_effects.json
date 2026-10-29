@@ -1,0 +1,16 @@
+{
+  "outcomes": [
+    "verified",
+    "invalidated"
+  ],
+  "receiver_effects": {
+    "stripe": 1,
+    "netsuite": 1
+  },
+  "successful_billing_applications": 1,
+  "proposal_states": [
+    "invalidated",
+    "executed"
+  ],
+  "attempt_budget": 6
+}
