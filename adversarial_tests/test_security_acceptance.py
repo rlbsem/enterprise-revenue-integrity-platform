@@ -188,7 +188,7 @@ def test_competing_approved_retries_cannot_multiply_effects(stack, observe):
             [
                 r
                 for r in rows(stack, "stripe", "requests")
-                if r["operation"] == "apply" and r["status"] == 200
+                if r["operation"] == "apply" and r["status"] == 201
             ]
         )
         == 1

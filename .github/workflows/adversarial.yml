@@ -29,7 +29,7 @@ jobs:
         run: docker build --tag integrity-acceptance:${{ github.sha }} .
       - name: Execute real isolated PostgreSQL and HTTP adversarial probes
         run: |
-          docker create --name integrity-adversarial --network none --read-only --user 10001:10001 --cap-drop ALL --security-opt no-new-privileges:true --memory 2g --cpus 2 --pids-limit 512 --tmpfs /tmp:size=536870912,mode=1777 --tmpfs /state:size=1073741824,uid=10001,gid=10001 --tmpfs /var/run/postgresql:size=4194304,mode=1777 --mount type=bind,source="$PWD/adversarial_tests",target=/opt/integrity/adversarial_tests,readonly --mount type=bind,source="$PWD/scripts",target=/opt/integrity/scripts,readonly --mount type=bind,source="$PWD/.local/adversarial-binding.json",target=/binding.json,readonly --mount type=bind,source="$PWD/.local/adversarial-container-output",target=/evidence --entrypoint python integrity-acceptance:${{ github.sha }} scripts/verify_adversarial.py --workspace /state/private --output /evidence/run --binding-file /binding.json
+          docker create --name integrity-adversarial --network none --read-only --user 10001:10001 --cap-drop ALL --security-opt no-new-privileges:true --memory 2g --cpus 2 --pids-limit 512 --env HOME=/state --tmpfs /tmp:size=536870912,mode=1777 --tmpfs /state:size=1073741824,uid=10001,gid=10001 --tmpfs /var/run/postgresql:size=4194304,mode=1777 --tmpfs /var/lib/postgresql/data:size=4194304,uid=10001,gid=10001 --mount type=bind,source="$PWD/adversarial_tests",target=/opt/integrity/adversarial_tests,readonly --mount type=bind,source="$PWD/scripts",target=/opt/integrity/scripts,readonly --mount type=bind,source="$PWD/.local/adversarial-binding.json",target=/binding.json,readonly --mount type=bind,source="$PWD/.local/adversarial-container-output",target=/evidence --entrypoint python integrity-acceptance:${{ github.sha }} scripts/verify_adversarial.py --workspace /state/private --output /evidence/run --binding-file /binding.json
           docker start --attach integrity-adversarial
           test "$(docker inspect --format '{{.State.ExitCode}}' integrity-adversarial)" = 0
       - name: Record actual containment and stop state
@@ -47,11 +47,12 @@ jobs:
           assert h['NetworkMode']=='none' and not h.get('PortBindings')
           assert h['CapDrop']==['ALL'] and not h['Privileged']
           assert h['Memory']==2147483648 and h['PidsLimit']==512
+          assert not any(m['Type']=='volume' for m in c['Mounts'])
           PY
       - name: Remove only the acceptance container and verify absence
         if: always()
         run: |
-          docker rm --force integrity-adversarial
+          docker rm --force --volumes integrity-adversarial
           test -z "$(docker ps -aq --filter name='^/integrity-adversarial$')"
           echo '{"acceptance_container_absent":true,"network_mode":"none","volumes_created":0,"host_ports_published":0}' > .local/adversarial-container-output/teardown.json
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
