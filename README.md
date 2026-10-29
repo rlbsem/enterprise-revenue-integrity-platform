@@ -6,7 +6,25 @@ An executable order-to-cash control layer and operator application. It follows a
 
 All Northstar business records are synthetic USD. Three separately running HTTP contract services represent finite Salesforce, Stripe Billing and NetSuite behaviors. **No native business-vendor API or paid cloud resource is used.**
 
-![Actual authenticated reconciliation console](docs/evidence/operator-console/run02/console-overview.png)
+## Docker Quick Start
+
+With Docker Engine 28+ and Compose V2 using Linux containers:
+
+```text
+docker compose up --build
+```
+
+Wait for `ready`, then open **http://127.0.0.1:8582**. In another terminal, retrieve your generated private login:
+
+```text
+docker compose exec demo python -m integrity.portable credentials --user auditor
+```
+
+Use `operator` to propose and `approver` to decide. Startup runs the actual PostgreSQL/HTTP/financial scenario. Only the console is published on host loopback. Stop and remove the disposable state with `docker compose down --volumes --remove-orphans`. [Five-minute walkthrough, port selection and security boundary](docs/portable-demo.md).
+
+[Executed Docker acceptance, recovery evidence and fresh screenshots](docs/evidence/portable/README.md).
+
+![Actual packaged reconciliation console](docs/evidence/portable/compose-run02/browser/console-overview.png)
 
 ## Follow the difference
 
@@ -83,4 +101,4 @@ The preserved [foundation](docs/evidence/pass1/README.md), [financial slice](doc
 
 Delivery is at least once with idempotent effects under the demonstrated receiver contracts. Shared local PostgreSQL infrastructure, loopback HTTP and finite synthetic cases do not establish production isolation, HA, RPO/RTO, throughput, universal exactly-once delivery, or atomic external authorization. Snowflake SQL is syntax-only; actual warehouse execution is DuckDB and local PostgreSQL. No arbitrary daily proration, FX, tax, refunds or GAAP/IFRS recognition engine is claimed.
 
-[Progress ledger](docs/progress.md). The separate independent architecture/security audit remains pending. This application is not publicly deployed; the draft PR remains unmerged.
+[Progress ledger](docs/progress.md). The separate independent architecture/security audit remains pending. This application is not publicly deployed. Portable execution is submitted as a separate draft PR for review.
