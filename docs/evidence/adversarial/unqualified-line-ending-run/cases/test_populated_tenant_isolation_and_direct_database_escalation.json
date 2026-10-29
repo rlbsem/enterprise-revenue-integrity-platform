@@ -1,0 +1,50 @@
+{
+  "actors": {
+    "operator": {
+      "observed_scope": [
+        "northstar",
+        "US"
+      ],
+      "visible_effects": 2,
+      "restricted_role": true,
+      "native_SQL_denial_states": [
+        "42501",
+        "42501",
+        "42501",
+        "42501"
+      ]
+    },
+    "reader_eu": {
+      "observed_scope": [
+        "northstar",
+        "EU"
+      ],
+      "visible_effects": 2,
+      "restricted_role": true,
+      "native_SQL_denial_states": [
+        "42501",
+        "42501",
+        "42501",
+        "42501"
+      ]
+    },
+    "outsider": {
+      "observed_scope": [
+        "other",
+        "US"
+      ],
+      "visible_effects": 2,
+      "restricted_role": true,
+      "native_SQL_denial_states": [
+        "42501",
+        "42501",
+        "42501",
+        "42501"
+      ]
+    }
+  },
+  "independent_receiver_effects": {
+    "stripe": 3,
+    "netsuite": 3
+  }
+}

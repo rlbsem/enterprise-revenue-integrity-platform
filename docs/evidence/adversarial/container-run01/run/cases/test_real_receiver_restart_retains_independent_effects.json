@@ -1,0 +1,11 @@
+{
+  "actual_receiver_process_restart": true,
+  "retained_effects": {
+    "stripe": 1,
+    "netsuite": 1
+  },
+  "gate": {
+    "safe_to_resume": true,
+    "issues": []
+  }
+}

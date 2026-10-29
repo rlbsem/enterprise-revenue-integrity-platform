@@ -1,0 +1,28 @@
+{
+  "independent_direct_source_database_totals": {
+    "billing_net_cents": 4150000,
+    "erp_net_cents": 4000000,
+    "allocated_cash_cents": 1650000,
+    "posting_variance_cents": -150000
+  },
+  "actual_published_totals": {
+    "billing_net_cents": 4150000,
+    "erp_net_cents": 4000000,
+    "allocated_cash_cents": 1650000,
+    "posting_variance_cents": -150000
+  },
+  "independent_cash_application_cents": 1650000,
+  "source_event_revisions": 3,
+  "failed_one_cent_publication_preserved_pointer": true,
+  "unresolved_cases": [
+    {
+      "tenant": "northstar",
+      "entity": "US",
+      "category": "unposted_adjustment_requires_review",
+      "state": "open",
+      "amount_cents": -150000
+    }
+  ],
+  "release_state": "review_required",
+  "native_vendor_execution": false
+}

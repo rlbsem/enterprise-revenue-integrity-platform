@@ -1,0 +1,15 @@
+{
+  "status": "failed",
+  "application_baseline_commit": "91822e2c014a4b9f5f7977ed8584ef33b3795677",
+  "new_probe_harness_committed_at_first_execution": false,
+  "cases": 10,
+  "failures": 4,
+  "observations": "Actual local PostgreSQL and HTTP before corrective changes",
+  "scope": "Installer-only corruption and restored-control consistency; not demonstrated ordinary-user exploits",
+  "confirmed_failures": [
+    "record_corruption_not_detected_by_index_gate",
+    "receipt_identity_corruption_not_detected_by_index_gate",
+    "retained_control_proof_corruption_not_detected_by_index_gate",
+    "partial_history_import_before_conflicting_hash_rejection"
+  ]
+}

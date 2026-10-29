@@ -1,0 +1,10 @@
+{
+  "cloud_resources_checked": false,
+  "owned_clusters_confirmed_stopped": 6,
+  "observed_at": "2026-10-29T04:20:16.2559858Z",
+  "remaining_exact_workspace_processes": 0,
+  "endpoints_checked": 26,
+  "boundary": "independent_Windows_listener_process_and_pg_ctl_inventory",
+  "status": "passed",
+  "remaining_listeners": 0
+}

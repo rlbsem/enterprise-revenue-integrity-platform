@@ -25,6 +25,8 @@ A monotonic fence and lease-owner token guard status writes. Lease expiry cannot
 
 Before new dispatch or financial extraction, the controller compares its intents against complete independent receiver inventories for scopes pinned outside the restored database. A missing intent, mismatched content, unavailable receiver or missing verified effect blocks continuation. The executed rollback test copies an earlier local PostgreSQL database while receiver databases retain later effects. It is not a managed-cloud PITR claim.
 
+Index agreement alone is insufficient. Current recovery acceptance rereads the exact receipt and every referenced business record, then compares retained verified control proof. The [additional corruption and process-boundary acceptance](evidence/adversarial/README.md) preserves the original index-only failure and its correction. Reviewed history import also checks existing scope, event, destination, payload, hash and verified proof before any import; a conflicting control hash cannot leave a partial import behind on rejection.
+
 A trusted local maintenance utility provides a narrow history-repair path:
 
 ```text

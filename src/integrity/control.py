@@ -272,7 +272,9 @@ class Controller:
     def step(self, effect_id, timeout=2, crash_marker=None):
         # Session lock survives attempt commits; a real process death releases it.
         # No lease takeover while an old worker is alive: simpler safety, less concurrency.
-        with psycopg.connect(self.dsn, row_factory=dict_row, autocommit=True) as session:
+        with psycopg.connect(
+            self.dsn, row_factory=dict_row, autocommit=True, connect_timeout=3
+        ) as session:
             got = session.execute(
                 "SELECT pg_try_advisory_lock(hashtextextended(%s,1)) AS held", (str(effect_id),)
             ).fetchone()["held"]
@@ -453,7 +455,20 @@ class Controller:
                 elif expected[effect_id]["hash"] != content:
                     reason = "receiver_intent_content_conflict"
                 else:
-                    continue
+                    # Index agreement alone does not establish the receipt identity,
+                    # immutable business contents or retained local verification proof.
+                    intent = expected[effect_id]
+                    try:
+                        with self.client(destination) as client:
+                            proof = self.read_proof(client, intent)
+                        if proof is None:
+                            reason = "receiver_proof_missing"
+                        elif intent["status"] == "verified" and intent["proof"] != proof:
+                            reason = "verified_control_proof_conflict"
+                        else:
+                            continue
+                    except (httpx.HTTPError, Refused, ValueError, KeyError, TypeError):
+                        reason = "receiver_proof_or_record_invalid"
                 issues.append(
                     {"destination": destination, "effect_id": effect_id, "reason": reason}
                 )

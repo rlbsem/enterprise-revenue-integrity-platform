@@ -1,0 +1,84 @@
+{
+  "source_commit": "47f235b830124cb3a7d5737a736a1e33a9f84629",
+  "workflow_run": 40818335424,
+  "workflow_job": 123265087851,
+  "workflow_url": "https://github.com/rlbsem/enterprise-revenue-integrity-platform/actions/runs/40818335424",
+  "artifact_id": 12873850586,
+  "artifact_name": "adversarial-container-evidence",
+  "artifact_archive_digest": "sha256:9e7d3992c752b6c569af8ed41fee9e2ae9c5f77482ce6cd209337dfd62aa9d14",
+  "inspection_source_sha256": "9d258e36ca615e29db36e97c38cda78304d33b3139a2fb6eec57a7027551769e",
+  "inspection_projection": "Actual Docker inspection allowlist; runner paths and unrelated configuration omitted",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-29T04:35:11.194734023Z",
+    "FinishedAt": "2026-10-29T04:36:05.653827923Z"
+  },
+  "user": "10001:10001",
+  "host_config": {
+    "ReadonlyRootfs": true,
+    "NetworkMode": "none",
+    "PortBindings": {},
+    "CapDrop": [
+      "ALL"
+    ],
+    "Privileged": false,
+    "Memory": 2147483648,
+    "NanoCpus": 2000000000,
+    "PidsLimit": 512,
+    "SecurityOpt": [
+      "no-new-privileges:true"
+    ],
+    "Tmpfs": {
+      "/state": "size=1073741824,uid=10001,gid=10001",
+      "/tmp": "size=536870912,mode=1777",
+      "/var/lib/postgresql/data": "size=4194304,uid=10001,gid=10001",
+      "/var/run/postgresql": "size=4194304,mode=1777"
+    }
+  },
+  "bind_mounts": [
+    {
+      "Type": "bind",
+      "Destination": "/opt/integrity/adversarial_tests",
+      "RW": false
+    },
+    {
+      "Type": "bind",
+      "Destination": "/opt/integrity/scripts",
+      "RW": false
+    },
+    {
+      "Type": "bind",
+      "Destination": "/binding.json",
+      "RW": false
+    },
+    {
+      "Type": "bind",
+      "Destination": "/evidence",
+      "RW": true
+    }
+  ],
+  "historical_CI_observations": [
+    {
+      "run_id": 40817673061,
+      "source_commit": "2111ac7fe77ebd2ea1b9b6861166aaaf4284fc71",
+      "adversarial_cases_passed": 25,
+      "job_conclusion": "failure",
+      "failure": "Host runner could not write containment and teardown reports into the directory owned by the container UID. Exact container removal executed, but reporting was incomplete."
+    },
+    {
+      "run_id": 40818226151,
+      "source_commit": "0077810addff55f3587cad3fbaa9dfd9f567c901",
+      "job_conclusion": "failure",
+      "failure": "Reporting-directory correction needed sudo for chmod after ownership transfer; no acceptance container started."
+    }
+  ],
+  "execution_boundary": "Actual isolated PostgreSQL and HTTP; synthetic business/vendor contracts; no native SaaS or cloud execution"
+}

@@ -12,4 +12,4 @@ A proposal freezes the original effect hash and source revision, not an arbitrar
 
 The source/mapping check and remote commit are not a distributed atomic transaction. Revocation between them is an acknowledged race; no production-wide authorization atomicity or HA guarantee is asserted. PostgreSQL superusers and the trusted fixture installer can bypass controls and are not untrusted application identities.
 
-[Executed adversarial tests](evidence/internal-acceptance/README.md) · [Recovery boundary](recovery.md). The separate independent principal-architect/security audit has not been performed.
+[Original adversarial tests](evidence/internal-acceptance/README.md) · [Additional independently observed SQL/HTTP acceptance](evidence/adversarial/README.md) · [Recovery boundary](recovery.md). A separate external human security audit has not been performed; automated adversarial execution is not represented as one.

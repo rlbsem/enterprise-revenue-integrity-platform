@@ -1,0 +1,61 @@
+{
+  "before": {
+    "inbox": 1,
+    "outbox": 1,
+    "source_heads": 0,
+    "audit": 0
+  },
+  "after": {
+    "inbox": 1,
+    "outbox": 1,
+    "source_heads": 0,
+    "audit": 0
+  },
+  "receiver_write_journal_before": {
+    "stripe": [
+      {
+        "id": 2,
+        "operation": "apply",
+        "status": 201
+      }
+    ],
+    "netsuite": [
+      {
+        "id": 2,
+        "operation": "apply",
+        "status": 201
+      }
+    ]
+  },
+  "receiver_write_journal_after": {
+    "stripe": [
+      {
+        "id": 2,
+        "operation": "apply",
+        "status": 201
+      }
+    ],
+    "netsuite": [
+      {
+        "id": 2,
+        "operation": "apply",
+        "status": 201
+      }
+    ]
+  },
+  "gate": {
+    "safe_to_resume": false,
+    "issues": [
+      {
+        "destination": "stripe",
+        "effect_id": "336d73b6-823e-5efb-bb59-ff0f647d6a28",
+        "reason": "receiver_intent_content_conflict"
+      },
+      {
+        "destination": "netsuite",
+        "effect_id": "84bf9093-2b6a-5da1-ab21-d071759357ce",
+        "reason": "remote_ahead_missing_intent"
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "acceptance-baseline.json": "cdb9c696355130147e614fefd18160d789c6cfec3112d7e709bd57af0b122747",
+  "test_bad_existing_hash_refuses_restore_before_any_history_import.json": "7dc8f550344b23437f813af9c34907f9ce99e61e8a023d5c50874a9d2a2fb199",
+  "test_recovery_rechecks_contents_not_only_index_hashes[control_proof].json": "10a562230eb1a062eaecbd0ed2bb193d737d54a6feada3ab95b67f00bd2f9bb4",
+  "test_recovery_rechecks_contents_not_only_index_hashes[receipt].json": "7f51cac917aebfaa628335c3c68367d35e83b7d22ec85515605739954e7ba342",
+  "test_recovery_rechecks_contents_not_only_index_hashes[record].json": "331cb4c1640a119911cf38045b23505c3d85a93719f6f38e60d5649c81bc24e2",
+  "test_reviewed_journal_corruption_is_rejected_without_financial_writes[digest].json": "d4d4b2c0ae7f6dd269f7f5351ee4ae5e0d5de1fe460cef6c552fb0dcbc9e377d",
+  "test_reviewed_journal_corruption_is_rejected_without_financial_writes[duplicate_effect].json": "4b34a36f28a929996a902274e393c85ce01af80bc16044b71bda080c527da3c5",
+  "test_reviewed_journal_corruption_is_rejected_without_financial_writes[missing_effect].json": "e0f1bf927872eace315d42319ee77cc52c479981967f9e67b54cece5c66af005",
+  "test_reviewed_journal_corruption_is_rejected_without_financial_writes[proof].json": "7cf41f44a89fcda0df9121cc371f4b0148e5972be9d8998af8eefa144efc16c5",
+  "test_reviewed_journal_corruption_is_rejected_without_financial_writes[scope].json": "a8b48ba0ef8b8f1e351f3216cae6a028c5fcb8c1fd8a8e22f9cea6044c3d22c2",
+  "test_reviewed_journal_corruption_is_rejected_without_financial_writes[source].json": "b461b6ae5ad8e3020199b81f7d69da2093e094881d8bfb05a2f553fe4de84d89"
+}

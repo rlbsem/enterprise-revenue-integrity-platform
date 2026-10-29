@@ -45,7 +45,9 @@ def restore_history(controller, journal, expected_digest):
         or journal["approved_scopes"] != controller.config["approved_scopes"]
     ):
         raise Refused("recovery_scope_manifest_mismatch")
-    with psycopg.connect(controller.dsn, autocommit=True, row_factory=dict_row) as session:
+    with psycopg.connect(
+        controller.dsn, autocommit=True, row_factory=dict_row, connect_timeout=3
+    ) as session:
         if not session.execute("SELECT pg_try_advisory_lock(714290311) AS held").fetchone()["held"]:
             raise Refused("recovery_requires_quiescent_control_workers")
         try:
@@ -141,7 +143,11 @@ def _restore(controller, session, journal):
         current = session.execute("SELECT * FROM outbox").fetchall()
         if any(
             str(e["effect_id"]) not in effects
-            or e["payload"] != effects[str(e["effect_id"])]["payload"]
+            or any(
+                e[field] != effects[str(e["effect_id"])][field]
+                for field in ("tenant", "entity", "event_id", "destination", "payload", "hash")
+            )
+            or (e["status"] == "verified" and e["proof"] != effects[str(e["effect_id"])]["proof"])
             for e in current
         ):
             raise Refused("existing_control_history_conflicts_with_archive")

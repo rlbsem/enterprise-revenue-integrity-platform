@@ -44,6 +44,14 @@ In the working console, a fourth synthetic account has an exhausted delivery aft
 
 [Inspect execution evidence](docs/evidence/README.md) · [Try the operator workflow](docs/operator-console.md) · [Financial definitions](docs/financial-contract.md)
 
+## Adversarial security and recovery acceptance
+
+A separate **25-case PostgreSQL/HTTP acceptance suite** challenges populated tenant isolation, native row security, real session/CSRF/origin boundaries, competing approvals, four worker termination points, database/service restarts and reviewed restoration against surviving receiver history. The existing **65-test baseline** and fresh **47-check browser acceptance** also passed.
+
+The probes reproduced and corrected two recovery defects: index hashes alone could miss corrupted receipts/records, and conflicting restored history could be partially imported before rejection. Financial calculations and fixtures remain unchanged; the synthetic **$1,500 ERP discrepancy stays open**. Failed observations, exact source revisions and independent source arithmetic are retained.
+
+[Executed findings, screenshots and limitations](docs/evidence/adversarial/README.md) · [Reproduction and security boundaries](docs/adversarial-acceptance.md). These are local and container test-environment controls, not native business-vendor or production acceptance.
+
 ## Architecture and controls
 
 ```mermaid

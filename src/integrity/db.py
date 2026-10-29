@@ -7,7 +7,7 @@ from psycopg.rows import dict_row
 
 @contextmanager
 def connect(dsn):
-    with psycopg.connect(dsn, row_factory=dict_row) as connection:
+    with psycopg.connect(dsn, row_factory=dict_row, connect_timeout=3) as connection:
         connection.execute("SET statement_timeout = '12s'")
         yield connection
 

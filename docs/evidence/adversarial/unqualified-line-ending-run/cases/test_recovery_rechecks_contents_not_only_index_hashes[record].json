@@ -1,0 +1,16 @@
+{
+  "controlled_fixture_corruption": "record",
+  "receiver_index_unchanged": true,
+  "gate": {
+    "safe_to_resume": false,
+    "issues": [
+      {
+        "destination": "stripe",
+        "effect_id": "336d73b6-823e-5efb-bb59-ff0f647d6a28",
+        "reason": "receiver_proof_or_record_invalid"
+      }
+    ]
+  },
+  "receiver_effects": 1,
+  "note": "Installer-only corruption; application-role mutation is separately denied"
+}

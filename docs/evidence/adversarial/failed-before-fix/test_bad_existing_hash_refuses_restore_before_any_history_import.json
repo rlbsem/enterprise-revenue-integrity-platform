@@ -1,0 +1,25 @@
+{
+  "before": {
+    "inbox": 1,
+    "outbox": 1,
+    "source_heads": 0,
+    "audit": 0
+  },
+  "after": {
+    "inbox": 1,
+    "outbox": 2,
+    "source_heads": 1,
+    "audit": 2
+  },
+  "remote_posts": 0,
+  "gate": {
+    "safe_to_resume": false,
+    "issues": [
+      {
+        "destination": "stripe",
+        "effect_id": "336d73b6-823e-5efb-bb59-ff0f647d6a28",
+        "reason": "receiver_intent_content_conflict"
+      }
+    ]
+  }
+}

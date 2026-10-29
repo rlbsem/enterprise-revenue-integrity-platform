@@ -1,0 +1,75 @@
+{
+  "actual_local_PostgreSQL_template_restore": true,
+  "blocked_before_recovery": {
+    "safe_to_resume": false,
+    "issues": [
+      {
+        "destination": "stripe",
+        "effect_id": "336d73b6-823e-5efb-bb59-ff0f647d6a28",
+        "reason": "remote_ahead_missing_intent"
+      },
+      {
+        "destination": "netsuite",
+        "effect_id": "84bf9093-2b6a-5da1-ab21-d071759357ce",
+        "reason": "remote_ahead_missing_intent"
+      }
+    ]
+  },
+  "history_recovery": {
+    "restored_intents": 2,
+    "remote_posts": 0,
+    "safe_to_resume": true,
+    "archive_hash": "62b78703b315d19128a92cac19aea4ed2432f7abe6282c95bc77a77459d68a6a"
+  },
+  "idempotent_history_recovery": {
+    "restored_intents": 0,
+    "remote_posts": 0,
+    "safe_to_resume": true,
+    "archive_hash": "62b78703b315d19128a92cac19aea4ed2432f7abe6282c95bc77a77459d68a6a"
+  },
+  "current_authority_result": {
+    "status": "blocked",
+    "detail": "source_not_current_replan_required",
+    "duplicate": false
+  },
+  "receiver_write_journal_before": {
+    "stripe": [
+      {
+        "id": 2,
+        "operation": "apply",
+        "status": 201
+      }
+    ],
+    "netsuite": [
+      {
+        "id": 2,
+        "operation": "apply",
+        "status": 201
+      }
+    ]
+  },
+  "receiver_write_journal_after": {
+    "stripe": [
+      {
+        "id": 2,
+        "operation": "apply",
+        "status": 201
+      }
+    ],
+    "netsuite": [
+      {
+        "id": 2,
+        "operation": "apply",
+        "status": 201
+      }
+    ]
+  },
+  "audit_actions": [
+    "historical_receipt_rehydrated",
+    "historical_receipt_rehydrated",
+    "historical_receipt_rehydrated",
+    "historical_receipt_rehydrated",
+    "blocked"
+  ],
+  "source_and_receiver_databases_not_restored": true
+}

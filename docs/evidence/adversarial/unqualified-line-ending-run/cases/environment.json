@@ -1,0 +1,5 @@
+{
+  "PostgreSQL": "17.11",
+  "owned_cluster": true,
+  "independent_database_count": 4
+}

@@ -1,0 +1,13 @@
+{
+  "classification": "acceptance_harness_error_not_application_vulnerability",
+  "observed_suite": {
+    "tests": 25,
+    "passed": 24,
+    "failed": 1
+  },
+  "failed_case": "test_competing_approved_retries_cannot_multiply_effects",
+  "incorrect_expectation": "Successful application journal entries had status 200",
+  "correction": "The receiver journal marks created applications as 201; failed attempts must remain distinct from committed effects. The normal HTTP response convention is separate.",
+  "independent_effect_checks": "One billing and one finance effect existed; those assertions passed before the journal-status assertion failed.",
+  "raw_output": "retained privately; excluded from publication"
+}

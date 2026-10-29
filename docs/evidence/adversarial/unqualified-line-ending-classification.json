@@ -1,0 +1,6 @@
+{
+  "qualification": "unqualified_source_binding",
+  "test_execution": "25 passed",
+  "cause": "The initial helper declared canonical UTF-8/LF but hashed raw CRLF bytes in some Windows working files",
+  "correction": "Use the established canonical text hash convention and rerun; recorded source hashes are preserved"
+}
