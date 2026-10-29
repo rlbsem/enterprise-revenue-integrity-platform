@@ -1,0 +1,9 @@
+{
+  "actual_owned_PostgreSQL_restart": true,
+  "independent_receipts_unchanged": true,
+  "restricted_scope_retained": true,
+  "gate": {
+    "safe_to_resume": true,
+    "issues": []
+  }
+}

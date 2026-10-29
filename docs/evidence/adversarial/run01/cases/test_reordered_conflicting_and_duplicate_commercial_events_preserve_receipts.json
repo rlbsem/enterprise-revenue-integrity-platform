@@ -1,0 +1,17 @@
+{
+  "reordered_HTTP_status": 409,
+  "conflict_HTTP_status": 409,
+  "duplicate_source_delivery": {
+    "duplicate": true,
+    "event_id": "change-eu-2",
+    "hash": "4ba4489d9461d0395c3a645c7bdbc3ea8d0f84d4b1eeaa4912880b9f1069c20d"
+  },
+  "independent_effects": {
+    "stripe": 2,
+    "netsuite": 2
+  },
+  "gate": {
+    "safe_to_resume": true,
+    "issues": []
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "rejection": "missing_effect",
+  "audit_rows_before": 5,
+  "audit_rows_after": 5,
+  "receiver_effects": {
+    "stripe": 1,
+    "netsuite": 1
+  }
+}

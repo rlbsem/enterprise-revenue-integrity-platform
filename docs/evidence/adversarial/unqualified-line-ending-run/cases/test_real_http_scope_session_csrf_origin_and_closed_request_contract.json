@@ -1,0 +1,20 @@
+{
+  "actual_loopback_HTTP": true,
+  "statuses": {
+    "unauthenticated": 401,
+    "cross_entity": 403,
+    "cross_tenant": 403,
+    "foreign_effect": 404,
+    "csrf_missing": 403,
+    "csrf_wrong": 403,
+    "closed_contract": 422,
+    "oversized": 413,
+    "revoked_session": 401
+  },
+  "source_effects": {
+    "stripe": 3,
+    "netsuite": 3
+  },
+  "operator_export": "US_only",
+  "credentials_recorded": false
+}

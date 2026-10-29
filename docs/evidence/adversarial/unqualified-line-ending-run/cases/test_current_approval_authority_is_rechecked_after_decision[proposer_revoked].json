@@ -1,0 +1,17 @@
+{
+  "changed_authority": "proposer_revoked",
+  "outcome": "invalidated",
+  "receiver_effects": 0,
+  "maximum_attempts": 3,
+  "audit_actions": [
+    "intent_committed",
+    "planned",
+    "uncertain",
+    "uncertain",
+    "uncertain",
+    "exhausted",
+    "operator_proposed",
+    "operator_approved",
+    "operator_execution_invalidated"
+  ]
+}
