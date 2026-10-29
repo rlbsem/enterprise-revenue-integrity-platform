@@ -1,0 +1,10 @@
+{
+  "initial.json": "ace4c46822a72f5c66993662e790900925c1b20ff0dbc42a1806fec498312260",
+  "failure-observation.json": "ca5b37b42a29ddb9eede91ca2b1ea0530caa5fab95ba87fcfdf49701b8274ab0",
+  "draft-observation.json": "83bed26f5888698817cc05b66c77d3df8aec473e571cb426340830921be0f50c",
+  "portable.json": "53235a46cacef962b16760caa5fce4dbf52c2485055517d9ad6a7768927db947",
+  "lifecycle.json": "42ba38f4c49a11fb97fe553e6e7168db15f29c2c8d5a4f8225e9bf5c84d8cd7e",
+  "browser/console-lineage.png": "3b88d41d89c37e4456b1d9918a8072673e457a0326c9795fa096fa3d61479172",
+  "browser/console-overview.png": "8281d4bed800f776996bd6a19d11c190e28db9af244aea062a939720493b178c",
+  "browser/console-approval.png": "e45f1428c65919a58f337b44b0cf6bf92ec6fced7d9fa6bf006c274e282f1533"
+}

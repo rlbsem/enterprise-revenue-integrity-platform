@@ -1,0 +1,34 @@
+services:
+  demo:
+    build: .
+    user: "10001:10001"
+    init: true
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    environment:
+      INTEGRITY_DEMO_PORT: "${INTEGRITY_DEMO_PORT:-8582}"
+    ports: ["127.0.0.1:${INTEGRITY_DEMO_PORT:-8582}:8080"]
+    volumes: [demo-state:/state]
+    tmpfs:
+      - /tmp:size=268435456,mode=1777
+      - /var/run/postgresql:size=4194304,mode=1777
+    mem_limit: 2048m
+    cpus: 2
+    pids_limit: 512
+    restart: "no"
+    stop_grace_period: 60s
+    healthcheck:
+      test: [CMD, python, -m, integrity.portable, health]
+      interval: 5s
+      timeout: 5s
+      start_period: 300s
+      retries: 6
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
+      com.docker.network.bridge.enable_icc: "false"
+volumes:
+  demo-state:

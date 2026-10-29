@@ -107,6 +107,13 @@ def create_app(config, origin="http://127.0.0.1:8582", start_worker=True):
     @app.middleware("http")
     async def boundaries(request: Request, call_next):
         if (
+            config.get("console_allowed_host")
+            and request.headers.get("host") != config["console_allowed_host"]
+        ):
+            return secure(
+                JSONResponse(status_code=400, content={"detail": "pinned_loopback_host_required"})
+            )
+        if (
             request.method not in ("GET", "HEAD", "OPTIONS")
             and request.headers.get("origin") != origin
         ):

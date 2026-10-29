@@ -116,8 +116,8 @@ def prepare(stack):
     return result, str(intent)
 
 
-def start_api(stack, port=8582):
-    stack.config["console_origin"] = f"http://127.0.0.1:{port}"
+def start_api(stack, port=8582, host="127.0.0.1", origin=None):
+    stack.config["console_origin"] = origin or f"http://127.0.0.1:{port}"
     stack.config["console_workspace"] = str(stack.workspace / "console-worker")
     path = stack.workspace / "console-private.json"
     path.write_bytes(json.dumps(stack.config).encode())
@@ -132,7 +132,7 @@ def start_api(stack, port=8582):
             "integrity.console_factory:factory",
             "--factory",
             "--host",
-            "127.0.0.1",
+            host,
             "--port",
             str(port),
             "--no-access-log",
@@ -147,7 +147,14 @@ def start_api(stack, port=8582):
         if process.poll() is not None:
             raise RuntimeError("console_start_failed_see_private_log")
         try:
-            if httpx.get(stack.config["console_origin"] + "/", trust_env=False).status_code == 200:
+            if (
+                httpx.get(
+                    f"http://127.0.0.1:{port}/",
+                    headers={"Host": stack.config.get("console_allowed_host", f"127.0.0.1:{port}")},
+                    trust_env=False,
+                ).status_code
+                == 200
+            ):
                 return process
         except httpx.HTTPError:
             pass
