@@ -25,6 +25,8 @@ jobs:
           mkdir -p .local/adversarial-container-output
           python scripts/verify_adversarial.py --write-binding --output .local/adversarial-binding.json
           sudo chown -R 10001:10001 .local/adversarial-container-output
+      - name: Verify committed acceptance and preserved history
+        run: python scripts/check_adversarial.py
       - name: Build the unchanged normal application image
         run: docker build --tag integrity-acceptance:${{ github.sha }} .
       - name: Execute real isolated PostgreSQL and HTTP adversarial probes
